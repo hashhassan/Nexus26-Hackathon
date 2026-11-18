@@ -1,0 +1,32 @@
+﻿{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx prisma validate)",
+      "Bash(npx prisma format)",
+      "Bash(npx prisma generate)",
+      "Bash(npx prisma migrate status)",
+      "Bash(npx prisma -v)",
+      "Bash(npm ls *)",
+      "Bash(curl -s http://localhost:3000/*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(npx prisma migrate reset *)",
+      "Bash(npx prisma db push *)",
+      "Bash(npx prisma@latest *)",
+      "Bash(git)",
+      "Bash(git *)",
+      "Read(./src/generated/**)"
+    ],
+    "ask": [
+      "Bash(npx prisma migrate dev *)",
+      "Bash(npx prisma migrate deploy *)",
+      "Bash(npm install *)"
+    ]
+  }
+}
