@@ -1,6 +1,7 @@
 import { Bell, ClipboardList, PlusCircle, Settings } from "lucide-react";
 import { AppShell, Sidebar, SidebarBrand, SidebarUserCard, type SidebarItem } from "@/components/shared";
 import { getRoleLabel } from "@/lib/constants";
+import { HelpBot } from "@/components/shared/help-bot";
 import { requireRole } from "@/server/auth";
 import { getUnreadCount } from "@/server/queries/notifications";
 
@@ -33,6 +34,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       }
     >
       {children}
+      <HelpBot role="student" />
     </AppShell>
   );
 }
