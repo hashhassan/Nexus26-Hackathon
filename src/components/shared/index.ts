@@ -13,6 +13,7 @@ export { SidebarBrand } from "./sidebar-brand";
 export { SidebarUserCard } from "./sidebar-user-card";
 export { AuthTabs } from "./auth-tabs";
 export { AuthField } from "./auth-field";
+export { PasswordInput } from "./password-input";
 export { StatusBadge } from "./status-badge";
 export { DepartmentIcon } from "./department-icon";
 export { NewComplaintForm } from "./new-complaint-form";

@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, CloudUpload, Send, Split, X } from "lucide-react";
 import { toast } from "sonner";
 import { DEPARTMENTS, DEPARTMENT_KEYS } from "@/lib/constants";
-import { createComplaintSchema } from "@/lib/schemas";
+import { createComplaintSchema, updateMyComplaintSchema } from "@/lib/schemas";
+import { createComplaint, updateMyComplaint } from "@/server/actions/complaints";
 import { cn } from "@/lib/utils";
 import { DepartmentIcon } from "./department-icon";
 
@@ -39,18 +41,29 @@ function Hint({ error, children }: { error?: string; children?: React.ReactNode 
   return children ? <span className="font-label-sm text-[11px] text-secondary">{children}</span> : null;
 }
 
-export function NewComplaintForm() {
+type EditValues = {
+  id: string;
+  department: Department;
+  issueType: string;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+};
+
+/** Without `edit` this is the new-complaint form; with it, a PENDING complaint is edited (category and image locked). */
+export function NewComplaintForm({ edit }: { edit?: EditValues }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [department, setDepartment] = useState<Department>(DEPARTMENT_KEYS[0]);
-  const [issueType, setIssueType] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [department, setDepartment] = useState<Department>(edit?.department ?? DEPARTMENT_KEYS[0]);
+  const [issueType, setIssueType] = useState(edit?.issueType ?? "");
+  const [title, setTitle] = useState(edit?.title ?? "");
+  const [description, setDescription] = useState(edit?.description ?? "");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string>();
   const [dragging, setDragging] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const dept = DEPARTMENTS[department];
 
@@ -96,8 +109,30 @@ export function NewComplaintForm() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitting) return;
+    if (edit) {
+      const parsedEdit = updateMyComplaintSchema.safeParse({ issueType, title, description });
+      if (!parsedEdit.success) {
+        const fieldErrors: Record<string, string> = {};
+        for (const issue of parsedEdit.error.issues) fieldErrors[String(issue.path[0])] ??= issue.message;
+        setErrors(fieldErrors);
+        return;
+      }
+      setErrors({});
+      setSubmitting(true);
+      const updated = await updateMyComplaint(edit.id, parsedEdit.data);
+      if (!updated.ok) {
+        setSubmitting(false);
+        if (updated.fieldErrors) setErrors(updated.fieldErrors);
+        toast.error(updated.error);
+        return;
+      }
+      toast.success("Complaint updated");
+      router.push(`/complaints/${edit.id}`);
+      return;
+    }
     const parsed = createComplaintSchema.safeParse({ department, issueType, title, description });
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
@@ -106,27 +141,39 @@ export function NewComplaintForm() {
       return;
     }
     setErrors({});
-    // Mock only: the server action arrives in Task 8.
+    setSubmitting(true);
+    const body = new FormData();
+    for (const [key, value] of Object.entries(parsed.data)) body.append(key, value);
+    if (file) body.append("image", file);
+    const result = await createComplaint(body);
+    if (!result.ok) {
+      setSubmitting(false);
+      if (result.fieldErrors?.image) setFileError(result.fieldErrors.image);
+      if (result.fieldErrors) setErrors(result.fieldErrors);
+      toast.error(result.error);
+      return;
+    }
     toast.success("Complaint submitted");
-    router.push("/complaints");
+    router.push(`/complaints/${result.id}`);
   }
 
   return (
     <form onSubmit={onSubmit} noValidate>
       {/* Step 1 */}
       <section className="mb-space-xl flex flex-col gap-space-md">
-        <StepHeader step={1} title="Choose category" />
+        <StepHeader step={1} title={edit ? "Category" : "Choose category"} />
         <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-4">
-          {DEPARTMENT_KEYS.map((key) => {
+          {(edit ? [department] : DEPARTMENT_KEYS).map((key) => {
             const selected = key === department;
             return (
               <button
                 key={key}
                 type="button"
                 aria-pressed={selected}
-                onClick={() => selectDepartment(key)}
+                onClick={() => (edit ? undefined : selectDepartment(key))}
                 className={cn(
-                  "group relative flex h-44 cursor-pointer flex-col justify-between rounded-xl p-space-lg text-left shadow-sm transition duration-200 hover:shadow-md",
+                  "group relative flex h-44 flex-col justify-between rounded-xl p-space-lg text-left shadow-sm transition duration-200 hover:shadow-md",
+                  edit ? "cursor-default" : "cursor-pointer",
                   selected
                     ? "bg-surface-container-low shadow-[0_0_0_2px_var(--color-primary-container)]"
                     : "bg-surface-container-lowest",
@@ -158,6 +205,7 @@ export function NewComplaintForm() {
           })}
         </div>
         {errors.department ? <Hint error={errors.department} /> : null}
+        {edit ? <Hint>Category can&apos;t be changed after submission.</Hint> : null}
 
         <div className="flex flex-col items-start gap-3 rounded-xl bg-surface-container-low p-space-md sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
@@ -256,6 +304,17 @@ export function NewComplaintForm() {
             <Hint error={errors.description} />
           </div>
 
+          {edit ? (
+            edit.imageUrl ? (
+              <div className="flex flex-col gap-2">
+                <span className="font-label-md text-label-md font-semibold text-on-surface">Attached image</span>
+                <div className="relative h-32 w-48 overflow-hidden rounded-lg bg-surface-container-high">
+                  <Image src={edit.imageUrl} alt="Attached evidence" fill sizes="192px" className="object-cover" />
+                </div>
+                <Hint>The attachment can&apos;t be changed after submission.</Hint>
+              </div>
+            ) : null
+          ) : (
           <div className="flex flex-col gap-2">
             <span className="flex items-center justify-between font-label-md text-label-md font-semibold text-on-surface">
               <span>Supporting Evidence &amp; Visual Documentation</span>
@@ -321,6 +380,7 @@ export function NewComplaintForm() {
             </div>
             <Hint error={fileError} />
           </div>
+          )}
         </div>
       </section>
 
@@ -333,10 +393,21 @@ export function NewComplaintForm() {
         </Link>
         <button
           type="submit"
-          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary-container px-space-xl py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-md transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover hover:shadow-lg active:translate-y-0 sm:w-auto"
+          disabled={submitting}
+          className="flex w-full cursor-pointer disabled:pointer-events-none disabled:opacity-50 items-center justify-center gap-2 rounded-xl bg-primary-container px-space-xl py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-md transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover hover:shadow-lg active:translate-y-0 sm:w-auto"
         >
-          <span>Submit complaint</span>
-          <Send className="size-[18px]" />
+          <span>
+            {submitting
+              ? edit
+                ? "Saving..."
+                : file
+                  ? "Uploading..."
+                  : "Submitting..."
+              : edit
+                ? "Save changes"
+                : "Submit complaint"}
+          </span>
+          {submitting ? null : <Send className="size-[18px]" />}
         </button>
       </footer>
     </form>

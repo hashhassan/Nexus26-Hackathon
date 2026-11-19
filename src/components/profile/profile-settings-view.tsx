@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, CircleCheck, FileText, IdCard, KeyRound, Lock, Power, Star, BarChart3, ShieldCheck, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
-import { SignOutButton } from "@/components/shared";
+import { PasswordInput, SignOutButton } from "@/components/shared";
+import { authClient } from "@/lib/auth-client";
 import { changePasswordSchema, updateProfileSchema } from "@/lib/schemas";
 import { cn, getInitials } from "@/lib/utils";
 
@@ -59,12 +61,15 @@ function roleBadge(role: Role, departmentLabel?: string) {
 
 export function ProfileSettingsView({ user, role, departmentLabel, stats }: ProfileSettingsViewProps) {
   const isAdmin = role !== "student";
+  const router = useRouter();
+  const [savingName, setSavingName] = useState(false);
+  const [savingPw, setSavingPw] = useState(false);
   const [name, setName] = useState(user.name);
   const [nameError, setNameError] = useState<string>();
   const [pw, setPw] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [pwErrors, setPwErrors] = useState<Record<string, string>>({});
 
-  function saveProfile(e: React.FormEvent) {
+  async function saveProfile(e: React.FormEvent) {
     e.preventDefault();
     const parsed = updateProfileSchema.safeParse({ name });
     if (!parsed.success) {
@@ -72,11 +77,18 @@ export function ProfileSettingsView({ user, role, departmentLabel, stats }: Prof
       return;
     }
     setNameError(undefined);
-    // Mock only: Better Auth updateUser arrives in Task 10b.
+    setSavingName(true);
+    const { error } = await authClient.updateUser({ name: parsed.data.name });
+    setSavingName(false);
+    if (error) {
+      toast.error(error.message ?? "Could not update profile");
+      return;
+    }
     toast.success("Profile updated");
+    router.refresh();
   }
 
-  function updatePassword(e: React.FormEvent) {
+  async function updatePassword(e: React.FormEvent) {
     e.preventDefault();
     const parsed = changePasswordSchema.safeParse(pw);
     if (!parsed.success) {
@@ -86,8 +98,17 @@ export function ProfileSettingsView({ user, role, departmentLabel, stats }: Prof
       return;
     }
     setPwErrors({});
+    setSavingPw(true);
+    const { error } = await authClient.changePassword({
+      currentPassword: parsed.data.currentPassword,
+      newPassword: parsed.data.newPassword,
+    });
+    setSavingPw(false);
+    if (error) {
+      toast.error(error.message ?? "Could not update password");
+      return;
+    }
     setPw({ currentPassword: "", newPassword: "", confirmPassword: "" });
-    // Mock only: Better Auth changePassword arrives in Task 10b.
     toast.success("Password updated");
   }
 
@@ -210,7 +231,8 @@ export function ProfileSettingsView({ user, role, departmentLabel, stats }: Prof
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover"
+              disabled={savingName}
+              className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover disabled:pointer-events-none disabled:opacity-50"
             >
               <Check className="size-[18px]" />
               Save changes
@@ -291,9 +313,8 @@ export function ProfileSettingsView({ user, role, departmentLabel, stats }: Prof
             ] as const
           ).map(([key, label, placeholder, autoComplete]) => (
             <Field key={key} id={key} label={label} error={pwErrors[key]}>
-              <input
+              <PasswordInput
                 id={key}
-                type="password"
                 autoComplete={autoComplete}
                 value={pw[key]}
                 onChange={(e) => setPw((p) => ({ ...p, [key]: e.target.value }))}
@@ -306,7 +327,8 @@ export function ProfileSettingsView({ user, role, departmentLabel, stats }: Prof
           <div className="flex items-center justify-end pt-3">
             <button
               type="submit"
-              className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover"
+              disabled={savingPw}
+              className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover disabled:pointer-events-none disabled:opacity-50"
             >
               <KeyRound className="size-[18px]" />
               Update password

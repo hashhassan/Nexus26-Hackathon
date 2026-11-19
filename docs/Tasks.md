@@ -25,29 +25,29 @@
   - Done when: sidebar in both layouts has Notifications (with count badge) and Profile & Settings links
 
 ## Phase 2 Backend (real data, no UI redesign)
-- [ ] 7. Seed + role routing (Stitch: none)
+- [x] 7. Seed + role routing (Stitch: none)
   - Done when: seed creates 1 super_admin, 4 dept_admins, 2 students via Better Auth API, ~15 complaints with updates and ratings
   - Done when: "/" redirects by role; both layouts have server-side role guards; template /dashboard removed
-- [ ] 8. Student backend (Stitch: New-Complain, Student-Dashboard, Complain-Detail)
+- [x] 8. Student backend (Stitch: New-Complain, Student-Dashboard, Complain-Detail)
   - Done when: create action (Zod, auto-routing by category) and own-complaints query with stats + filter work
   - Done when: detail query is owner only, else notFound()
   - Done when: rating action is owner only, RESOLVED only, once
-- [ ] 9. Admin complaints backend (Stitch: Admin-Complain-List, Complain-Detail)
+- [x] 9. Admin complaints backend (Stitch: Admin-Complain-List, Complain-Detail)
   - Done when: list query with search + filters, department-scoped in the where-clause
   - Done when: detail query returns notFound() for another department
   - Done when: status change, remark, resolve, reject (reason required) actions each write a ComplaintUpdate
-- [ ] 10. Dashboard backend (Stitch: Admin-Dashboard)
+- [x] 10. Dashboard backend (Stitch: Admin-Dashboard)
   - Done when: stat counts, chart data, Avg. Satisfaction, top recurring issues, recent complaints are real
   - Done when: all department-scoped for dept_admin
-- [ ] 10b. Notifications + profile backend, 15 min (Stitch: Notification, Profile&Setting)
+- [x] 10b. Notifications + profile backend, 15 min (Stitch: Notification, Profile&Setting)
   - Done when: student notifications = recent ComplaintUpdates on their own complaints; admin notifications = new complaints in their department (all for super_admin); unread = newer than a "notificationsSeenAt" cookie, "Mark all as read" sets the cookie
   - Done when: name update uses Better Auth updateUser, password change uses Better Auth changePassword, activity stats come from real queries
-- [ ] 11. Image upload with @vercel/blob (Stitch: New-Complain, Complain-Detail). Cut first if behind schedule.
+- [x] 11. Image upload with @vercel/blob (Stitch: New-Complain, Complain-Detail). Cut first if behind schedule.
   - Done when: upload on the new complaint form saves imageUrl
   - Done when: image shows on student and admin detail
 
 ## Phase 3 Finish
-- [ ] 12. Polish + deploy check (Stitch: all)
+- [x] 12. Polish + deploy check (Stitch: all)
   - Done when: hover animations consistent; loading/empty/error states present
   - Done when: security cases tested by URL; README has live URL + demo logins
   - Done when: lint, tsc, build pass; Vercel deploy works

@@ -34,7 +34,7 @@ export default function SignUpPage() {
       toast.error(error.message ?? "Could not create account");
       return;
     }
-    router.push("/dashboard");
+    router.push("/");
     router.refresh();
   }
 

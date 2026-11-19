@@ -2,12 +2,12 @@ import Link from "next/link";
 import { BellRing, CircleCheck, Clock, FilePlus2, Hash, MessageSquare, XCircle, type LucideIcon } from "lucide-react";
 import { EmptyState } from "@/components/shared";
 import { STATUS_LABELS } from "@/lib/constants";
-import type { MockNotification } from "@/lib/mock-data";
+import type { NotificationItem } from "@/server/queries/notifications";
 import { cn } from "@/lib/utils";
-import { MarkAllReadButton } from "./mark-all-read-button";
+import { NotificationLink } from "./notification-link";
 
 type NotificationsViewProps = {
-  notifications: MockNotification[];
+  notifications: NotificationItem[];
   /** "/complaints" (student) or "/admin/complaints" (admin). */
   basePath: string;
   filter?: "unread";
@@ -27,7 +27,7 @@ function timeAgo(date: Date, now: Date) {
 
 const sameDay = (a: Date, b: Date) => a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10);
 
-function iconFor(n: MockNotification): { Icon: LucideIcon; tone: string } {
+function iconFor(n: NotificationItem): { Icon: LucideIcon; tone: string } {
   if (n.kind === "new") return { Icon: FilePlus2, tone: "bg-secondary-container/60 text-primary" };
   if (n.kind === "remark") return { Icon: MessageSquare, tone: "bg-tertiary-fixed text-tertiary" };
   if (n.status === "RESOLVED") return { Icon: CircleCheck, tone: "bg-secondary-container text-on-secondary-fixed" };
@@ -35,7 +35,7 @@ function iconFor(n: MockNotification): { Icon: LucideIcon; tone: string } {
   return { Icon: Clock, tone: "bg-secondary-container/60 text-primary" };
 }
 
-function Message({ n }: { n: MockNotification }) {
+function Message({ n }: { n: NotificationItem }) {
   const title = (
     <span className="font-medium text-on-surface underline decoration-outline-variant decoration-1 underline-offset-4">
       “{n.complaintTitle}”
@@ -72,11 +72,27 @@ function Message({ n }: { n: MockNotification }) {
   );
 }
 
-function Row({ n, basePath, now }: { n: MockNotification; basePath: string; now: Date }) {
+function Row({
+  n,
+  basePath,
+  now,
+  allHref,
+  inUnreadTab,
+}: {
+  n: NotificationItem;
+  basePath: string;
+  now: Date;
+  allHref: string;
+  inUnreadTab: boolean;
+}) {
   const { Icon, tone } = iconFor(n);
   return (
-    <Link
+    <NotificationLink
+      id={n.id}
+      unread={n.unread}
       href={`${basePath}/${n.complaintId}`}
+      allHref={allHref}
+      inUnreadTab={inUnreadTab}
       className="group relative block rounded-xl bg-surface-container-lowest p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
     >
       <div className="flex items-start gap-4">
@@ -111,7 +127,7 @@ function Row({ n, basePath, now }: { n: MockNotification; basePath: string; now:
           </div>
         </div>
       </div>
-    </Link>
+    </NotificationLink>
   );
 }
 
@@ -151,9 +167,6 @@ export function NotificationsView({ notifications, basePath, filter, now = new D
               ? "Stay updated on newly submitted complaints routed to your department."
               : "Stay updated on real-time department remarks, investigation status shifts, and ticket resolutions."}
           </p>
-        </div>
-        <div className="flex shrink-0 items-center">
-          <MarkAllReadButton disabled={unreadCount === 0} />
         </div>
       </div>
 
@@ -219,7 +232,7 @@ export function NotificationsView({ notifications, basePath, filter, now = new D
               </div>
               <div className="flex flex-col gap-2.5">
                 {today.map((n) => (
-                  <Row key={n.id} n={n} basePath={basePath} now={now} />
+                  <Row key={n.id} n={n} basePath={basePath} now={now} allHref={notificationsPath} inUnreadTab={filter === "unread"} />
                 ))}
               </div>
             </section>
@@ -233,7 +246,7 @@ export function NotificationsView({ notifications, basePath, filter, now = new D
               </div>
               <div className="flex flex-col gap-2.5">
                 {earlier.map((n) => (
-                  <Row key={n.id} n={n} basePath={basePath} now={now} />
+                  <Row key={n.id} n={n} basePath={basePath} now={now} allHref={notificationsPath} inUnreadTab={filter === "unread"} />
                 ))}
               </div>
             </section>

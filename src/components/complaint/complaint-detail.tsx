@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Check, Eye, FileText, Image as ImageIcon, Tag, Activity } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Check, Eye, FileText, Image as ImageIcon, ShieldCheck, Tag, Activity } from "lucide-react";
 import type { Complaint, ComplaintStatus, ComplaintUpdate, User } from "@/generated/prisma/client";
 import { DepartmentIcon, StatusBadge } from "@/components/shared";
 import { DEPARTMENTS } from "@/lib/constants";
@@ -15,6 +16,8 @@ export type ComplaintDetailData = Complaint & {
 type ComplaintDetailProps = {
   complaint: ComplaintDetailData;
   viewer: "student" | "admin";
+  /** Admin only: false shows a read-only oversight card instead of the action panel. */
+  canAct?: boolean;
 };
 
 const dateTime = new Intl.DateTimeFormat("en-US", {
@@ -59,7 +62,7 @@ function buildSteps(complaint: ComplaintDetailData): Step[] {
   return steps;
 }
 
-export function ComplaintDetail({ complaint, viewer }: ComplaintDetailProps) {
+export function ComplaintDetail({ complaint, viewer, canAct = true }: ComplaintDetailProps) {
   const dept = DEPARTMENTS[complaint.department];
   const backHref = viewer === "admin" ? "/admin/complaints" : "/complaints";
   const steps = buildSteps(complaint);
@@ -72,9 +75,9 @@ export function ComplaintDetail({ complaint, viewer }: ComplaintDetailProps) {
       <div className="mb-space-md flex items-center gap-2 pt-2">
         <Link
           href={backHref}
-          className="inline-flex items-center gap-1.5 font-label-md text-label-md text-secondary transition-colors hover:text-primary"
+          className="group inline-flex items-center gap-1.5 font-label-md text-label-md text-secondary transition duration-200 hover:text-primary"
         >
-          <ArrowLeft className="size-[18px]" />
+          <ArrowLeft className="size-[18px] transition-transform duration-200 group-hover:-translate-x-0.5" />
           Complaints
         </Link>
       </div>
@@ -142,14 +145,20 @@ export function ComplaintDetail({ complaint, viewer }: ComplaintDetailProps) {
                   Attached Visual Evidence (1 File)
                 </span>
                 <div className="group relative flex flex-col items-center gap-space-md overflow-hidden rounded-xl bg-surface-container-low p-3 transition-all hover:bg-surface-container sm:flex-row">
-                  <div className="relative h-24 w-full shrink-0 overflow-hidden rounded-lg bg-surface-container-high sm:w-36">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <a
+                    href={complaint.imageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="relative block h-24 w-full shrink-0 overflow-hidden rounded-lg bg-surface-container-high sm:w-36"
+                  >
+                    <Image
                       src={complaint.imageUrl}
                       alt="Attached evidence"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      sizes="144px"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                  </div>
+                  </a>
                   <div className="flex w-full min-w-0 flex-1 flex-col">
                     <div className="flex items-center gap-2">
                       <ImageIcon className="size-5 text-primary" />
@@ -269,10 +278,32 @@ export function ComplaintDetail({ complaint, viewer }: ComplaintDetailProps) {
 
           {viewer === "student" ? (
             complaint.status === "RESOLVED" ? (
-              <RatingCard rating={complaint.rating} ratingComment={complaint.ratingComment} />
+              <RatingCard complaintId={complaint.id} rating={complaint.rating} ratingComment={complaint.ratingComment} />
             ) : null
+          ) : canAct ? (
+            <ActionPanel complaintId={complaint.id} status={complaint.status} />
           ) : (
-            <ActionPanel status={complaint.status} />
+            <section className="relative flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-container via-primary to-secondary" />
+              <div className="flex items-center gap-2 pt-1">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container text-primary">
+                  <ShieldCheck className="size-5" />
+                </div>
+                <div>
+                  <span className="block font-label-sm text-label-sm uppercase tracking-wider text-secondary">
+                    Read-only
+                  </span>
+                  <h2 className="font-headline-md text-headline-md text-on-surface">Oversight view</h2>
+                </div>
+              </div>
+              <p className="font-body-md text-body-md text-secondary">
+                Only the assigned department can update this complaint.
+              </p>
+              <div className="flex items-center gap-2 rounded-lg bg-surface-container-low p-3 font-label-md text-label-md font-semibold text-on-surface">
+                <Building2 className="size-4 text-primary" />
+                {dept.adminName}
+              </div>
+            </section>
           )}
         </div>
       </div>

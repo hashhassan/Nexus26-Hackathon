@@ -4,16 +4,19 @@ import { useState } from "react";
 import { Send, Star } from "lucide-react";
 import { toast } from "sonner";
 import { rateComplaintSchema } from "@/lib/schemas";
+import { rateComplaint } from "@/server/actions/complaints";
 import { cn } from "@/lib/utils";
 
 const RATING_LABELS = ["Poor", "Fair", "Good", "Very Good", "Excellent"];
 
 type RatingCardProps = {
+  complaintId: string;
   rating: number | null;
   ratingComment: string | null;
 };
 
-export function RatingCard({ rating: initialRating, ratingComment: initialComment }: RatingCardProps) {
+export function RatingCard({ complaintId, rating: initialRating, ratingComment: initialComment }: RatingCardProps) {
+  const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState<{ rating: number; comment: string | null } | null>(
     initialRating !== null ? { rating: initialRating, comment: initialComment } : null,
   );
@@ -22,7 +25,7 @@ export function RatingCard({ rating: initialRating, ratingComment: initialCommen
   const [comment, setComment] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  function submit() {
+  async function submit() {
     const parsed = rateComplaintSchema.safeParse({ rating: value || undefined, comment });
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
@@ -31,7 +34,14 @@ export function RatingCard({ rating: initialRating, ratingComment: initialCommen
       return;
     }
     setErrors({});
-    // Mock only: the rating action arrives in Task 8.
+    setPending(true);
+    const result = await rateComplaint(complaintId, parsed.data.rating, parsed.data.comment);
+    setPending(false);
+    if (!result.ok) {
+      if (result.fieldErrors) setErrors(result.fieldErrors);
+      toast.error(result.error);
+      return;
+    }
     setSaved({ rating: parsed.data.rating, comment: parsed.data.comment || null });
     toast.success("Thanks for rating this resolution");
   }
@@ -120,7 +130,8 @@ export function RatingCard({ rating: initialRating, ratingComment: initialCommen
             <button
               type="button"
               onClick={submit}
-              className="inline-flex items-center gap-2 rounded-xl bg-primary-container px-5 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover active:translate-y-0"
+              disabled={pending}
+              className="inline-flex disabled:pointer-events-none disabled:opacity-50 items-center gap-2 rounded-xl bg-primary-container px-5 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover active:translate-y-0"
             >
               <Send className="size-[18px]" />
               Submit Rating

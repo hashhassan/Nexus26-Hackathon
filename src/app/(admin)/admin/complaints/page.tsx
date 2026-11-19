@@ -5,10 +5,11 @@ import { FilterSelect } from "@/components/admin/filter-select";
 import { SearchInput } from "@/components/admin/search-input";
 import { DepartmentIcon, EmptyState, StatusBadge } from "@/components/shared";
 import { DEPARTMENTS, DEPARTMENT_KEYS, STATUS_LABELS } from "@/lib/constants";
-import { mockComplaints } from "@/lib/mock-data";
 import { cn, getInitials } from "@/lib/utils";
+import { requireRole } from "@/server/auth";
+import { ADMIN_PAGE_SIZE, getAdminComplaints } from "@/server/queries/admin-complaints";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = ADMIN_PAGE_SIZE;
 const STATUSES = Object.keys(STATUS_LABELS) as ComplaintStatus[];
 const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
@@ -27,23 +28,25 @@ function pageList(current: number, total: number): (number | "…")[] {
 }
 
 export default async function AdminComplaintsPage({ searchParams }: { searchParams: Promise<Params> }) {
+  const viewer = await requireRole(["dept_admin", "super_admin"]);
+  const isSuper = viewer.role === "super_admin";
   const params = await searchParams;
   const q = (params.q ?? "").trim();
-  const department = DEPARTMENT_KEYS.find((k) => k === params.department);
+  // Only super_admin can filter by department; dept_admin is always scoped server-side.
+  const department = isSuper ? DEPARTMENT_KEYS.find((k) => k === params.department) : undefined;
   const status = STATUSES.find((s) => s === params.status);
+  const ownDepartment = DEPARTMENT_KEYS.find((k) => k === viewer.department);
 
-  const filtered = mockComplaints
-    .filter((c) => !department || c.department === department)
-    .filter((c) => !status || c.status === status)
-    .filter((c) => !q || c.title.toLowerCase().includes(q.toLowerCase()))
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const page = Math.min(Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1), totalPages);
-  const rows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const result = await getAdminComplaints(viewer, {
+    q,
+    department,
+    status,
+    page: Number.parseInt(params.page ?? "1", 10) || 1,
+  });
+  const { rows, page, totalPages, scopedTotal, scopedPending } = result;
+  const filtered = { length: result.total };
   const from = filtered.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = (page - 1) * PAGE_SIZE + rows.length;
-  const pendingCount = mockComplaints.filter((c) => c.status === "PENDING").length;
 
   function pageHref(p: number) {
     const next = new URLSearchParams();
@@ -69,7 +72,7 @@ export default async function AdminComplaintsPage({ searchParams }: { searchPara
             <h1 className="font-headline-lg text-headline-lg tracking-tight text-on-surface">Complaints</h1>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container-high px-2.5 py-0.5 font-label-md text-label-md text-on-surface-variant">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              {mockComplaints.length} total cases, {pendingCount} pending triage
+              {scopedTotal} total cases, {scopedPending} pending triage
             </span>
           </div>
           <p className="font-body-md text-body-md text-on-surface-variant">
@@ -83,13 +86,20 @@ export default async function AdminComplaintsPage({ searchParams }: { searchPara
       <div className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
         <div className="flex flex-wrap items-center gap-space-xs">
           <SearchInput placeholder="Search by title..." />
-          <FilterSelect
-            param="department"
-            ariaLabel="Filter by category"
-            allLabel="All Categories"
-            icon={<Building2 />}
-            options={DEPARTMENT_KEYS.map((k) => ({ value: k, label: DEPARTMENTS[k].label }))}
-          />
+          {isSuper ? (
+            <FilterSelect
+              param="department"
+              ariaLabel="Filter by category"
+              allLabel="All Categories"
+              icon={<Building2 />}
+              options={DEPARTMENT_KEYS.map((k) => ({ value: k, label: DEPARTMENTS[k].label }))}
+            />
+          ) : (
+            <div className="inline-flex items-center gap-2 rounded-lg bg-surface-container-lowest px-3.5 py-2 font-label-md text-label-md text-on-surface shadow-sm">
+              <Building2 className="size-[18px] text-secondary" />
+              <span>{ownDepartment ? DEPARTMENTS[ownDepartment].adminName : "Department Admin"}</span>
+            </div>
+          )}
           <FilterSelect
             param="status"
             ariaLabel="Filter by status"

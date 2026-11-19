@@ -41,7 +41,7 @@ export function Sidebar({ items, title = "Menu", brand, footer, className }: Sid
       {brand ? (
         <div className="border-b border-border/60 px-space-md pb-space-md pt-space-lg">{brand}</div>
       ) : null}
-      <nav aria-label={title} className="px-space-md py-space-sm md:flex-1">
+      <nav aria-label={title} className="px-space-md py-space-sm">
         <Button
           variant="outline"
           className="w-full justify-between md:hidden"
@@ -84,6 +84,43 @@ export function Sidebar({ items, title = "Menu", brand, footer, className }: Sid
           })}
         </ul>
       </nav>
+      {/* Decorative card, fills the gap above the user card. Hidden on small screens. */}
+      <div aria-hidden className="mt-auto hidden px-space-md pb-space-md md:block">
+        <div className="overflow-hidden rounded-xl bg-surface-container-low p-space-md transition duration-200 hover:shadow-md">
+          <svg
+            viewBox="0 0 240 100"
+            fill="none"
+            className="h-24 w-full"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* ground */}
+            <line x1="0" y1="88" x2="240" y2="88" className="stroke-outline-variant" strokeWidth="1.5" />
+            {/* path */}
+            <path d="M96 88L84 100M144 88L156 100" className="stroke-outline-variant" strokeWidth="1" />
+            {/* library block */}
+            <path d="M10 88V56H56V88" className="stroke-primary-container" strokeWidth="1.3" />
+            <path d="M10 56L33 44L56 56" className="stroke-primary-container" strokeLinejoin="round" strokeWidth="1.3" />
+            <path d="M22 88V72H30V88M38 88V72H46V88" className="stroke-outline" strokeWidth="1" />
+            {/* main hall with clock tower */}
+            <path d="M72 88V46H168V88" className="stroke-primary-container" strokeWidth="1.3" />
+            <path d="M108 46V22H132V46" className="stroke-primary-container" strokeWidth="1.3" />
+            <path d="M104 22L120 8L136 22" className="stroke-primary-container" strokeLinejoin="round" strokeWidth="1.3" />
+            <circle cx="120" cy="32" r="4" className="stroke-outline" strokeWidth="1" />
+            <path d="M84 88V60M96 88V60M144 88V60M156 88V60" className="stroke-outline" strokeWidth="1" />
+            <path d="M112 88V70H128V88" className="stroke-outline" strokeWidth="1" />
+            {/* lab block */}
+            <path d="M184 88V50H230V88" className="stroke-primary-container" strokeWidth="1.3" />
+            <path d="M192 62H202M212 62H222M192 76H202M212 76H222" className="stroke-outline" strokeWidth="1" />
+            {/* tree */}
+            <path d="M172 88V74" className="stroke-outline" strokeWidth="1.2" />
+            <circle cx="172" cy="68" r="7" className="stroke-secondary" strokeWidth="1.2" />
+          </svg>
+          <p className="mt-space-sm font-headline-md text-title-md text-on-surface">Every voice, heard.</p>
+          <p className="mt-0.5 font-label-sm text-label-sm normal-case tracking-normal text-secondary">
+            Report. Track. Resolved.
+          </p>
+        </div>
+      </div>
       {footer ? <div className="border-t border-border p-space-md">{footer}</div> : null}
     </div>
   );

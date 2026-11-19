@@ -12,8 +12,7 @@ export const signUpSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-export const createComplaintSchema = z
-  .object({
+const complaintFields = z.object({
     department: z.enum(["CAFETERIA", "LIBRARY", "LABS_IT", "TEACHING"], {
       message: "Choose a category",
     }),
@@ -28,11 +27,15 @@ export const createComplaintSchema = z
       .trim()
       .min(20, "Description must be at least 20 characters")
       .max(1000, "Description must be at most 1,000 characters"),
-  })
-  .refine((v) => !v.issueType || DEPARTMENTS[v.department].issueTypes.includes(v.issueType), {
-    path: ["issueType"],
-    message: "Select a valid issue type for this category",
-  });
+});
+
+export const createComplaintSchema = complaintFields.refine(
+  (v) => !v.issueType || DEPARTMENTS[v.department].issueTypes.includes(v.issueType),
+  { path: ["issueType"], message: "Select a valid issue type for this category" },
+);
+
+/** Student edit: department is never editable, so it is not part of the input. */
+export const updateMyComplaintSchema = complaintFields.omit({ department: true });
 
 export const updateComplaintSchema = z
   .object({
@@ -87,5 +90,6 @@ export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type UpdateComplaintInput = z.infer<typeof updateComplaintSchema>;
 export type RateComplaintInput = z.infer<typeof rateComplaintSchema>;
 export type SignInInput = z.infer<typeof signInSchema>;
+export type UpdateMyComplaintInput = z.infer<typeof updateMyComplaintSchema>;
 export type CreateComplaintInput = z.infer<typeof createComplaintSchema>;
 export type SignUpInput = z.infer<typeof signUpSchema>;

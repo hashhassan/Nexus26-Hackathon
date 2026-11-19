@@ -1,10 +1,8 @@
-import { AppHeader } from "@/components/app-header";
-import { AppShell, PageHeader } from "@/components/shared";
+import { redirect } from "next/navigation";
+import { getSession, isAdmin } from "@/server/auth";
 
-export default function Home() {
-  return (
-    <AppShell navbar={<AppHeader />}>
-      <PageHeader title="Nexus26" description="Hackathon project template." />
-    </AppShell>
-  );
+export default async function Home() {
+  const session = await getSession();
+  if (!session) redirect("/sign-in");
+  redirect(isAdmin(session.user.role) ? "/admin" : "/complaints");
 }

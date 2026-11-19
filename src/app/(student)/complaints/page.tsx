@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   Building2,
-  ChevronRight,
   CircleCheck,
   CirclePlus,
   DraftingCompass,
@@ -14,9 +13,11 @@ import {
   Tag,
 } from "lucide-react";
 import type { ComplaintStatus } from "@/generated/prisma/client";
+import { ComplaintRowActions } from "@/components/complaint/complaint-row-actions";
 import { DepartmentIcon, EmptyState, StatCard, StatusBadge } from "@/components/shared";
 import { DEPARTMENTS, STATUS_LABELS } from "@/lib/constants";
-import { mockComplaints, mockStudent } from "@/lib/mock-data";
+import { requireRole } from "@/server/auth";
+import { getMyComplaintStats, getMyComplaints } from "@/server/queries/complaints";
 import { cn } from "@/lib/utils";
 
 const STATUSES = Object.keys(STATUS_LABELS) as ComplaintStatus[];
@@ -28,13 +29,23 @@ export default async function ComplaintsPage({
 }: {
   searchParams: Promise<{ status?: string | string[] }>;
 }) {
+  const user = await requireRole(["student"]);
   const { status } = await searchParams;
   const activeStatus = STATUSES.find((s) => s === status);
 
-  const mine = mockComplaints.filter((c) => c.studentId === mockStudent.id);
-  const count = (s: ComplaintStatus) => mine.filter((c) => c.status === s).length;
-  const visible = activeStatus ? mine.filter((c) => c.status === activeStatus) : mine;
-  const firstName = mockStudent.name.split(" ")[0];
+  const [stats, visible] = await Promise.all([
+    getMyComplaintStats(user.id),
+    getMyComplaints(user.id, activeStatus),
+  ]);
+  const counts: Record<ComplaintStatus, number> = {
+    PENDING: stats.pending,
+    IN_PROGRESS: stats.inProgress,
+    RESOLVED: stats.resolved,
+    REJECTED: stats.rejected,
+  };
+  const count = (s: ComplaintStatus) => counts[s];
+  const mine = { length: stats.total };
+  const firstName = user.name.split(" ")[0];
 
   const tabs = [
     { href: "/complaints", label: `All (${mine.length})`, active: !activeStatus },
@@ -182,9 +193,8 @@ export default async function ComplaintsPage({
             {visible.map((c) => {
               const dept = DEPARTMENTS[c.department];
               return (
-                <Link
+                <div
                   key={c.id}
-                  href={`/complaints/${c.id}`}
                   className="group flex flex-col justify-between gap-space-md rounded-xl bg-surface-container-lowest p-space-lg shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md lg:flex-row lg:items-center"
                 >
                   <div className="flex min-w-0 items-start gap-space-md">
@@ -227,11 +237,9 @@ export default async function ComplaintsPage({
                         <span className="text-xs text-secondary">(Rated)</span>
                       </span>
                     ) : null}
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-low text-secondary transition duration-200 group-hover:bg-primary-container group-hover:text-on-primary">
-                      <ChevronRight className="size-5 transition-transform group-hover:translate-x-0.5" />
-                    </div>
+                    <ComplaintRowActions id={c.id} status={c.status} />
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

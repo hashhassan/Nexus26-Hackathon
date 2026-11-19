@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export async function AppHeader() {
   const session = await getSession();
 
-  const links: NavLink[] = session ? [{ href: "/dashboard", label: "Dashboard" }] : [];
+  const links: NavLink[] = session ? [{ href: "/", label: "Dashboard" }] : [];
 
   return (
     <Navbar

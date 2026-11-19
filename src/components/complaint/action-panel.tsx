@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/shared";
 import { STATUS_LABELS } from "@/lib/constants";
 import { updateComplaintSchema } from "@/lib/schemas";
+import { updateComplaint } from "@/server/actions/admin-complaints";
 
 type Status = keyof typeof STATUS_LABELS;
 const STATUSES = Object.keys(STATUS_LABELS) as Status[];
@@ -13,7 +14,8 @@ const STATUSES = Object.keys(STATUS_LABELS) as Status[];
 const fieldClass =
   "w-full rounded-lg bg-surface-container-low p-3 font-body-md text-body-md text-on-surface transition-all placeholder:text-secondary/60 focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary-container/20 aria-invalid:ring-2 aria-invalid:ring-error";
 
-export function ActionPanel({ status: currentStatus }: { status: Status }) {
+export function ActionPanel({ complaintId, status: currentStatus }: { complaintId: string; status: Status }) {
+  const [pending, setPending] = useState(false);
   const closed = currentStatus === "RESOLVED" || currentStatus === "REJECTED";
   const [status, setStatus] = useState<Status>(currentStatus);
   const [remark, setRemark] = useState("");
@@ -25,7 +27,21 @@ export function ActionPanel({ status: currentStatus }: { status: Status }) {
   const reasonCheck = updateComplaintSchema.safeParse({ status: "REJECTED", remark: reason });
   const reasonError = reasonCheck.success ? undefined : reasonCheck.error.issues[0]?.message;
 
-  function save(nextStatus: Status, successMessage: string) {
+  async function send(nextStatus: Status, nextRemark: string, successMessage: string) {
+    if (pending) return false;
+    setPending(true);
+    const result = await updateComplaint(complaintId, { status: nextStatus, remark: nextRemark });
+    setPending(false);
+    if (!result.ok) {
+      if (result.fieldErrors) setErrors(result.fieldErrors);
+      toast.error(result.error);
+      return false;
+    }
+    toast.success(successMessage);
+    return true;
+  }
+
+  async function save(nextStatus: Status, successMessage: string) {
     const parsed = updateComplaintSchema.safeParse({ status: nextStatus, remark });
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
@@ -34,15 +50,14 @@ export function ActionPanel({ status: currentStatus }: { status: Status }) {
       return;
     }
     setErrors({});
-    // Mock only: the update action arrives in Task 9.
-    toast.success(successMessage);
+    if (await send(nextStatus, parsed.data.remark, successMessage)) setRemark("");
   }
 
-  function confirmReject() {
-    // Mock only: the reject action arrives in Task 9.
-    toast.success("Complaint rejected");
-    setReason("");
-    setReasonTouched(false);
+  async function confirmReject() {
+    if (await send("REJECTED", reason, "Complaint rejected")) {
+      setReason("");
+      setReasonTouched(false);
+    }
   }
 
   return (
@@ -117,7 +132,8 @@ export function ActionPanel({ status: currentStatus }: { status: Status }) {
             <button
               type="button"
               onClick={() => save(status, "Update saved")}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-container px-4 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover active:translate-y-0"
+              disabled={pending}
+              className="inline-flex w-full disabled:pointer-events-none disabled:opacity-50 items-center justify-center gap-2 rounded-xl bg-primary-container px-4 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover active:translate-y-0"
             >
               <Save className="size-[18px]" />
               Save update
@@ -126,7 +142,8 @@ export function ActionPanel({ status: currentStatus }: { status: Status }) {
               <button
                 type="button"
                 onClick={() => save("RESOLVED", "Complaint marked as resolved")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-status-resolved-fg px-4 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 sm:flex-1"
+                disabled={pending}
+                className="inline-flex w-full disabled:pointer-events-none disabled:opacity-50 items-center justify-center gap-2 rounded-xl bg-status-resolved-fg px-4 py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 sm:flex-1"
               >
                 <ListChecks className="size-[18px]" />
                 Mark Resolved
@@ -152,7 +169,7 @@ export function ActionPanel({ status: currentStatus }: { status: Status }) {
             description="The student will see your reason. This closes the complaint."
             confirmLabel="Reject complaint"
             destructive
-            confirmDisabled={!reasonCheck.success}
+            confirmDisabled={!reasonCheck.success || pending}
             onConfirm={confirmReject}
           >
             <div className="flex flex-col gap-1.5">

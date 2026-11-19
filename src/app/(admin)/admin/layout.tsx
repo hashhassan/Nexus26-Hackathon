@@ -1,14 +1,12 @@
 import { Bell, LayoutDashboard, ListChecks, Settings } from "lucide-react";
 import { AppShell, Sidebar, SidebarBrand, SidebarUserCard, type SidebarItem } from "@/components/shared";
 import { getRoleLabel } from "@/lib/constants";
-import { mockAdminNotifications, mockAdmins } from "@/lib/mock-data";
-import { getSession } from "@/server/auth";
+import { requireRole } from "@/server/auth";
+import { getUnreadCount } from "@/server/queries/notifications";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getSession();
-  // No guards until Task 7: fall back to the mock super admin when logged out.
-  const user = session?.user ?? mockAdmins[0];
-  const unread = mockAdminNotifications.filter((n) => n.unread).length;
+  const user = await requireRole(["dept_admin", "super_admin"]);
+  const unread = await getUnreadCount(user);
 
   const items: SidebarItem[] = [
     { href: "/admin", label: "Dashboard", icon: <LayoutDashboard /> },

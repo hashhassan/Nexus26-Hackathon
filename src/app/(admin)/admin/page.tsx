@@ -4,18 +4,10 @@ import { DepartmentBarChart } from "@/components/admin/department-bar-chart";
 import { FilterSelect } from "@/components/admin/filter-select";
 import { StatusDonutChart, type StatusSlice } from "@/components/admin/status-donut-chart";
 import { StatCard, StatusBadge } from "@/components/shared";
-import { DEPARTMENTS, DEPARTMENT_KEYS, type Role } from "@/lib/constants";
-import {
-  mockAvgSatisfaction,
-  mockComplaints,
-  mockDepartmentCounts,
-  mockRecurringIssues,
-  mockStats,
-} from "@/lib/mock-data";
+import { DEPARTMENTS, DEPARTMENT_KEYS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-// Mock viewer until Task 7 wires the real session.
-const viewerRole: Role = "super_admin";
+import { requireRole } from "@/server/auth";
+import { getDashboardData } from "@/server/queries/dashboard";
 
 const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 
@@ -24,38 +16,15 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: Promise<{ department?: string | string[] }>;
 }) {
+  const viewer = await requireRole(["dept_admin", "super_admin"]);
+  const isSuper = viewer.role === "super_admin";
   const { department } = await searchParams;
-  const dept = viewerRole === "super_admin" ? DEPARTMENT_KEYS.find((k) => k === department) : undefined;
+  const requested = isSuper && typeof department === "string" ? department : undefined;
+  const ownDepartment = DEPARTMENT_KEYS.find((k) => k === viewer.department);
 
-  const list = dept ? mockComplaints.filter((c) => c.department === dept) : mockComplaints;
-  const count = (s: string) => list.filter((c) => c.status === s).length;
-  const stats = dept
-    ? {
-        total: list.length,
-        pending: count("PENDING"),
-        inProgress: count("IN_PROGRESS"),
-        resolved: count("RESOLVED"),
-        rejected: count("REJECTED"),
-      }
-    : mockStats;
-
-  const rated = list.filter((c) => c.rating !== null);
-  const satisfaction = dept
-    ? {
-        average: rated.length
-          ? Number((rated.reduce((sum, c) => sum + (c.rating ?? 0), 0) / rated.length).toFixed(1))
-          : 0,
-        count: rated.length,
-      }
-    : mockAvgSatisfaction;
-
-  const departmentCounts = dept ? mockDepartmentCounts.filter((d) => d.department === dept) : mockDepartmentCounts;
-  const recurring = (dept ? mockRecurringIssues.filter((i) => i.department === dept) : mockRecurringIssues)
-    .slice()
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+  const { stats, satisfaction, chart, recurring, recent } = await getDashboardData(viewer, requested);
   const maxRecurring = Math.max(1, ...recurring.map((i) => i.count));
-  const recent = list.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 5);
+  const avgText = satisfaction.average === null ? "—" : satisfaction.average.toFixed(1);
 
   const slices: StatusSlice[] = [
     { key: "RESOLVED", label: "Resolved", count: stats.resolved, color: "var(--color-status-resolved-fg)" },
@@ -64,7 +33,7 @@ export default async function AdminDashboardPage({
     { key: "REJECTED", label: "Rejected", count: stats.rejected, color: "var(--color-status-rejected-fg)" },
   ];
   const resolvedShare = stats.total ? Math.round((stats.resolved / stats.total) * 100) : 0;
-  const filledStars = Math.round(satisfaction.average);
+  const filledStars = Math.round(satisfaction.average ?? 0);
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-space-lg pb-space-xl">
@@ -88,7 +57,7 @@ export default async function AdminDashboardPage({
               Real-time campus resolution metrics, cross-department incident triage, and satisfaction ratings.
             </p>
           </div>
-          {viewerRole === "super_admin" ? (
+          {isSuper ? (
             <FilterSelect
               param="department"
               ariaLabel="Filter by department"
@@ -96,7 +65,12 @@ export default async function AdminDashboardPage({
               icon={<Building2 />}
               options={DEPARTMENT_KEYS.map((k) => ({ value: k, label: DEPARTMENTS[k].label }))}
             />
-          ) : null}
+          ) : (
+            <div className="inline-flex items-center gap-2 rounded-lg bg-surface-container-lowest px-3.5 py-2 font-label-md text-label-md text-on-surface shadow-sm">
+              <Building2 className="size-[18px] text-secondary" />
+              <span>{ownDepartment ? DEPARTMENTS[ownDepartment].adminName : "Department Admin"}</span>
+            </div>
+          )}
         </div>
       </section>
 
@@ -151,13 +125,13 @@ export default async function AdminDashboardPage({
           <div className="flex items-center justify-between">
             <span className="font-label-md text-label-md font-semibold text-on-surface">Avg. Satisfaction</span>
             <span className="inline-flex items-center rounded bg-surface-container-lowest px-1.5 py-0.5 font-label-sm text-label-sm font-bold text-primary-container">
-              {satisfaction.average.toFixed(1)} ★
+              {avgText} ★
             </span>
           </div>
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
               <span className="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface">
-                {satisfaction.average.toFixed(1)}
+                {avgText}
               </span>
               <span className="font-label-md text-label-md text-secondary">/ 5.0</span>
             </div>
@@ -180,16 +154,20 @@ export default async function AdminDashboardPage({
         <div className="flex flex-col rounded-2xl bg-surface-container-lowest p-space-lg shadow-sm">
           <div className="flex items-center justify-between pb-space-md">
             <div>
-              <h2 className="font-headline-md text-headline-md text-on-surface">Complaints by Department</h2>
+              <h2 className="font-headline-md text-headline-md text-on-surface">
+                {isSuper ? "Complaints by Department" : "Complaints by Issue Type"}
+              </h2>
               <p className="mt-0.5 font-label-md text-label-md text-secondary">
-                Volume load across administrative operational units
+                {isSuper
+                  ? "Volume load across administrative operational units"
+                  : "Volume load across the issue types of your department"}
               </p>
             </div>
             <span className="inline-flex items-center gap-1.5 rounded-md bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm font-medium text-secondary">
               <span className="h-2 w-2 rounded-full bg-primary-container" /> Volume
             </span>
           </div>
-          <DepartmentBarChart data={departmentCounts.map((d) => ({ label: d.label, count: d.count }))} />
+          <DepartmentBarChart data={chart} />
         </div>
 
         <div className="flex flex-col rounded-2xl bg-surface-container-lowest p-space-lg shadow-sm">

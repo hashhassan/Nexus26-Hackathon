@@ -1,13 +1,12 @@
 import { Bell, ClipboardList, PlusCircle, Settings } from "lucide-react";
 import { AppShell, Sidebar, SidebarBrand, SidebarUserCard, type SidebarItem } from "@/components/shared";
 import { getRoleLabel } from "@/lib/constants";
-import { mockNotifications, mockStudent } from "@/lib/mock-data";
-import { getSession } from "@/server/auth";
+import { requireRole } from "@/server/auth";
+import { getUnreadCount } from "@/server/queries/notifications";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
-  const session = await getSession();
-  const user = session?.user ?? mockStudent;
-  const unread = mockNotifications.filter((n) => n.unread).length;
+  const user = await requireRole(["student"]);
+  const unread = await getUnreadCount(user);
 
   const items: SidebarItem[] = [
     { href: "/complaints", label: "My Complaints", icon: <ClipboardList /> },

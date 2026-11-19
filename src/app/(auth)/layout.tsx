@@ -1,5 +1,7 @@
 import { BadgeCheck, Building2, Landmark, Lock, NotebookPen, Route, ShieldCheck } from "lucide-react";
+import { redirect } from "next/navigation";
 import { AuthTabs } from "@/components/shared";
+import { getSession } from "@/server/auth";
 
 const features = [
   { icon: <NotebookPen className="size-5" />, title: "Submit", step: "01", text: "File complaints & feedback in seconds with category tagging." },
@@ -7,7 +9,8 @@ const features = [
   { icon: <BadgeCheck className="size-5" />, title: "Resolve", step: "03", text: "Direct resolutions, feedback verification, and closed-loop updates." },
 ];
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  if (await getSession()) redirect("/");
   return (
     <div className="grid min-h-dvh grid-cols-1 bg-surface font-body-md text-on-surface lg:grid-cols-2">
         {/* LEFT HALF */}

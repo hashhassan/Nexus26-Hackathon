@@ -66,7 +66,7 @@ export function ComponentsDemo() {
           <Sidebar
             title="Demo menu"
             items={[
-              { href: "/dashboard", label: "Dashboard", icon: <Activity /> },
+              { href: "/", label: "Dashboard", icon: <Activity /> },
               { href: "/dev/components", label: "Components", icon: <Users /> },
             ]}
           />
