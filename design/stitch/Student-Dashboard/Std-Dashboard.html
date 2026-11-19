@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#93000a","error-container":"#ffdad6","surface-variant":"#dae2fd","primary-fixed-dim":"#c3c0ff","on-primary-fixed":"#0f0069","surface":"#faf8ff","on-secondary-fixed-variant":"#38485d","on-tertiary-fixed":"#100563","tertiary":"#231f74","secondary-container":"#d0e1fb","surface-container-high":"#e2e7ff","tertiary-fixed-dim":"#c3c0ff","surface-container-low":"#f2f3ff","on-background":"#131b2e","inverse-on-surface":"#eef0ff","surface-dim":"#d2d9f4","on-primary-container":"#a9a7ff","on-tertiary":"#ffffff","surface-container-lowest":"#ffffff","on-secondary-fixed":"#0b1c30","inverse-primary":"#c3c0ff","error":"#ba1a1a","tertiary-fixed":"#e2dfff","primary-fixed":"#e2dfff","on-surface-variant":"#464553","tertiary-container":"#3a388b","on-secondary":"#ffffff","surface-bright":"#faf8ff","background":"#faf8ff","on-primary":"#ffffff","on-surface":"#131b2e","on-primary-fixed-variant":"#3b35a7","inverse-surface":"#283044","on-tertiary-container":"#a9a7ff","surface-container-highest":"#dae2fd","on-secondary-container":"#54647a","secondary":"#505f76","secondary-fixed-dim":"#b7c8e1","outline-variant":"#c8c4d5","surface-container":"#eaedff","primary-container":"#3730a3","primary":"#1f108e","outline":"#777584","on-tertiary-fixed-variant":"#3e3c8f","on-error":"#ffffff","secondary-fixed":"#d3e4fe","surface-tint":"#544fc0"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","margin":"3rem","gutter-compact":"1rem","space-xs":"0.25rem","space-md":"1rem"},"fontFamily":{"label-md":["Inter"],"display-lg":["Newsreader"],"label-sm":["Inter"],"body-md":["Inter"],"headline-md":["Newsreader"],"title-md":["Inter"],"display-md":["Newsreader"],"body-lg":["Inter"],"headline-lg":["Newsreader"]},"fontSize":{"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"500"}],"title-md":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"display-md":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}};</script>
+<style>
+  /* Sidebar transition classes handled smoothly via tailwind & helper classes */
+  #main-sidebar.is-collapsed {
+    width: 4.5rem; /* 72px */
+  }
+  #main-sidebar.is-collapsed .sidebar-text,
+  #main-sidebar.is-collapsed .sidebar-full-info,
+  #main-sidebar.is-collapsed .sidebar-badge {
+    display: none !important;
+  }
+  #main-sidebar.is-collapsed .sidebar-nav-item {
+    justify-content: center !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  #main-sidebar.is-collapsed .sidebar-header-box {
+    justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  #main-sidebar.is-collapsed .sidebar-user-box {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  #main-sidebar.is-collapsed .sidebar-user-actions {
+    display: none;
+  }
+  #main-wrapper.is-collapsed {
+    padding-left: 4.5rem; /* 72px */
+  }
+  #main-header.is-collapsed {
+    left: 4.5rem; /* 72px */
+  }
+  /* Show campus artwork accent banner when canvas is wide/expanded */
+  .canvas-art-banner {
+    transition: all 0.3s ease-in-out;
+  }
+</style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- Collapsible Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-[#E7E5E4] transition-all duration-300 ease-in-out" id="main-sidebar">
+<div class="flex flex-col">
+<!-- Sidebar Header with Logo & Toggle Button -->
+<div class="px-space-md pt-space-lg pb-space-md flex items-center justify-between border-b border-[#E7E5E4]/60 sidebar-header-box">
+<div class="flex items-center gap-space-sm min-w-0 overflow-hidden">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">account_balance</span>
+</div>
+<div class="flex flex-col sidebar-text min-w-0">
+<span class="font-headline-md text-headline-md font-semibold text-on-surface leading-tight truncate">CampusConnect</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary px-space-xs py-0.5 rounded bg-secondary-container/40 w-fit mt-1">Student Portal</span>
+</div>
+</div>
+<!-- Toggle Button inside Sidebar header -->
+<button aria-label="Collapse sidebar" class="sidebar-text p-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center shrink-0" id="sidebar-toggle-btn" title="Collapse sidebar" type="button">
+<span class="material-symbols-outlined text-[20px]" id="toggle-icon">menu_open</span>
+</button>
+</div>
+<!-- Navigation items -->
+<div class="px-space-md py-space-sm">
+<nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm">
+<a aria-current="page" class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-semibold shadow-sm" data-path="my-complaints" href="#" title="My Complaints">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] shrink-0">assignment_late</span>
+<span class="font-label-md text-label-md sidebar-text truncate">My Complaints</span>
+</div>
+<!-- Mini Rail Tooltip on collapsed state -->
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            My Complaints
+          </div>
+</a>
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="new-complaint" href="#" title="New Complaint">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] shrink-0">add_circle</span>
+<span class="font-label-md text-label-md sidebar-text truncate">New Complaint</span>
+</div>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            New Complaint
+          </div>
+</a>
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="notifications" href="#" title="Notifications">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] shrink-0">notifications</span>
+<span class="font-label-md text-label-md sidebar-text truncate">Notifications</span>
+</div>
+<span class="sidebar-badge px-1.5 py-0.5 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container">3</span>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            Notifications (3)
+          </div>
+</a>
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#" title="Settings">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] shrink-0">settings</span>
+<span class="font-label-md text-label-md sidebar-text truncate">Settings</span>
+</div>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            Settings
+          </div>
+</a>
+</nav>
+</div>
+<!-- Architectural Line Vector Motif in Sidebar (Subtle Linear/Campus styling) -->
+<div class="sidebar-text px-space-md mt-4">
+<div class="p-space-sm rounded-xl bg-surface-container-low border border-[#E7E5E4]/80 flex flex-col gap-2">
+<div class="flex items-center justify-between text-secondary">
+<span class="font-label-sm text-[10px] uppercase tracking-wider font-semibold">Campus Quad Hub</span>
+<span class="material-symbols-outlined text-[14px]">school</span>
+</div>
+<!-- Architectural Minimal SVG Graphic -->
+<svg class="w-full h-14 text-primary/30" fill="none" viewbox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 50H190" stroke="currentColor" stroke-linecap="round" stroke-width="1.2"></path>
+<path d="M25 50V30L55 20L85 30V50" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<path d="M40 50V38H50V50" stroke="currentColor" stroke-width="1"></path>
+<path d="M85 35H115V50" stroke="currentColor" stroke-width="1.2"></path>
+<path d="M100 20V35" stroke="currentColor" stroke-width="1.2"></path>
+<circle cx="100" cy="18" fill="currentColor" r="2"></circle>
+<path d="M115 50V25L145 15L175 25V50" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<line stroke="currentColor" stroke-width="1" x1="130" x2="130" y1="30" y2="40"></line>
+<line stroke="currentColor" stroke-width="1" x1="160" x2="160" y1="30" y2="40"></line>
+<circle cx="55" cy="27" fill="currentColor" r="1.5"></circle>
+</svg>
+<span class="text-[11px] text-secondary leading-tight">University Division of Student Support &amp; Facilities</span>
+</div>
+</div>
+</div>
+<!-- Bottom User Profile Card & Expand Toggle on Mini Rail -->
+<div class="p-space-md border-t border-[#E7E5E4] bg-surface-container-lowest flex flex-col gap-2">
+<!-- Rail expand toggle shown when collapsed -->
+<button aria-label="Expand sidebar" class="hidden w-full py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface items-center justify-center transition-all" id="mini-rail-toggle-btn" title="Expand sidebar" type="button">
+<span class="material-symbols-outlined text-[20px]">dock_to_right</span>
+</button>
+<div class="sidebar-user-box flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-on-primary font-label-md text-label-md">AR</div>
+<div class="sidebar-full-info flex flex-col truncate">
+<span class="font-label-md text-label-md text-on-surface truncate font-medium">Ali Reza</span>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-1.5 py-0.5 rounded-full w-fit">Student</span>
+</div>
+</div>
+<a class="sidebar-user-actions text-on-surface-variant hover:text-error transition-colors p-1 flex items-center justify-center rounded-lg hover:bg-surface-container" data-path="sign-out" href="#" title="Sign Out">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Wrapper with Left Margin Matching Sidebar State -->
+<div class="pl-64 flex flex-col min-h-screen transition-all duration-300 ease-in-out" id="main-wrapper">
+<!-- Top App Header -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 flex items-center justify-between px-gutter border-b border-[#E7E5E4] transition-all duration-300 ease-in-out" id="main-header">
+<!-- Header Quick Sidebar Toggle Button -->
+<div class="flex items-center gap-space-sm">
+<button aria-label="Toggle sidebar" class="p-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center" id="header-sidebar-toggle-btn" title="Toggle sidebar layout" type="button">
+<span class="material-symbols-outlined text-[22px]">view_sidebar</span>
+</button>
+<span class="hidden sm:inline-block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Campus Academic Oversight System</span>
+</div>
+<!-- Header Actions & Avatar -->
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+</div>
+</div>
+</header>
+<!-- Main View Area -->
+<main class="w-full pt-16 px-gutter lg:px-margin py-space-lg flex-1 bg-surface">
+<div class="flex flex-col w-full">
+<div class="max-w-[1440px] w-full mx-auto space-y-space-xl pb-space-xl">
+<!-- Header Section with Decorative Architectural Graphic Accent Banner for Broad Canvas -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pt-2">
+<div class="space-y-space-xs max-w-2xl">
+<div class="flex items-center gap-space-xs text-secondary">
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Student Academic Oversight</span>
+<span class="text-xs">•</span>
+<span class="font-label-sm text-label-sm text-secondary">Fall Term 2024</span>
+</div>
+<h1 class="font-display-lg text-display-lg font-normal text-on-surface tracking-tight">Good morning, Ali</h1>
+<p class="font-body-lg text-body-lg text-secondary">
+              Track your filed campus reports, follow department resolutions, and submit official inquiries with real-time institutional accountability.
+            </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="group inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200" type="button">
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:rotate-90 duration-300">add</span>
+<span>New Complaint</span>
+</button>
+</div>
+</div>
+<!-- Campus Architectural Aesthetic Strip (Linear / Stripe inspired architectural vector) -->
+<div class="canvas-art-banner hidden lg:flex items-center justify-between px-space-lg py-3 rounded-2xl bg-surface-container-lowest border border-[#E7E5E4] shadow-sm overflow-hidden">
+<div class="flex items-center gap-space-md">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">architecture</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-semibold">Institutional Infrastructure Quality Monitor</p>
+<p class="font-body-md text-xs text-secondary">Active campus building sensors and dispatch systems reporting nominal latency.</p>
+</div>
+</div>
+<svg class="h-10 text-primary-container/25 max-w-[340px]" fill="none" viewbox="0 0 380 40" xmlns="http://www.w3.org/2000/svg">
+<line stroke="currentColor" stroke-width="1.5" x1="0" x2="380" y1="35" y2="35"></line>
+<path d="M20 35V18L45 8L70 18V35" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<path d="M45 8V35" stroke="currentColor" stroke-dasharray="2 2" stroke-width="0.8"></path>
+<path d="M90 35V22H130V35" stroke="currentColor" stroke-width="1.2"></path>
+<circle cx="110" cy="16" r="3" stroke="currentColor" stroke-width="1"></circle>
+<path d="M150 35V12L190 5L230 12V35" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<line stroke="currentColor" stroke-width="1" x1="170" x2="170" y1="20" y2="28"></line>
+<line stroke="currentColor" stroke-width="1" x1="190" x2="190" y1="17" y2="28"></line>
+<line stroke="currentColor" stroke-width="1" x1="210" x2="210" y1="20" y2="28"></line>
+<path d="M250 35V20H290V35" stroke="currentColor" stroke-width="1.2"></path>
+<path d="M310 35V15L340 7L370 15V35" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+</svg>
+</div>
+<!-- Metric / Stat Cards (4-Column Bento Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1: Total -->
+<div class="relative overflow-hidden bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Total Filings</span>
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-display-md text-display-md text-on-surface font-normal leading-none tracking-tight">12</div>
+<div class="flex items-center gap-1.5 mt-space-xs text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm">All-time archival filings</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-20 h-20 bg-surface-container/50 rounded-full blur-xl pointer-events-none"></div>
+</div>
+<!-- Card 2: Pending -->
+<div class="relative overflow-hidden bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Pending</span>
+<div class="w-10 h-10 rounded-lg bg-secondary-container/50 flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[20px]">hourglass_top</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-display-md text-display-md text-on-surface font-normal leading-none tracking-tight">2</div>
+<div class="flex items-center gap-1.5 mt-space-xs text-on-secondary-fixed-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm">Awaiting registrar review</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-20 h-20 bg-secondary-container/30 rounded-full blur-xl pointer-events-none"></div>
+</div>
+<!-- Card 3: In Progress -->
+<div class="relative overflow-hidden bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">In Progress</span>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">engineering</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-display-md text-display-md text-on-surface font-normal leading-none tracking-tight">3</div>
+<div class="flex items-center gap-1.5 mt-space-xs text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm">Dispatched to campus crews</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-20 h-20 bg-primary-fixed/20 rounded-full blur-xl pointer-events-none"></div>
+</div>
+<!-- Card 4: Resolved -->
+<div class="relative overflow-hidden bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Resolved</span>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-display-md text-display-md text-on-surface font-normal leading-none tracking-tight">7</div>
+<div class="flex items-center gap-1.5 mt-space-xs text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm">Completed satisfactorily</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-20 h-20 bg-tertiary-fixed/30 rounded-full blur-xl pointer-events-none"></div>
+</div>
+</div>
+<!-- Main Content Work Area: Controls & Stack -->
+<div class="space-y-space-md">
+<!-- Filter Tabs & Quick Search Bar -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-sm">
+<!-- Filter Tabs -->
+<div class="flex items-center gap-1 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+<button class="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all whitespace-nowrap" type="button">
+                All (12)
+              </button>
+<button class="px-space-md py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all whitespace-nowrap" type="button">
+                Pending (2)
+              </button>
+<button class="px-space-md py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all whitespace-nowrap" type="button">
+                In Progress (3)
+              </button>
+<button class="px-space-md py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all whitespace-nowrap" type="button">
+                Resolved (7)
+              </button>
+<button class="px-space-md py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all whitespace-nowrap" type="button">
+                Rejected (0)
+              </button>
+</div>
+<!-- Search & Department Dropdown -->
+<div class="flex items-center gap-space-xs">
+<div class="relative flex-1 sm:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-secondary">search</span>
+<input class="w-full pl-9 pr-3 py-2 bg-surface-container-low text-on-surface placeholder:text-secondary rounded-lg font-body-md text-body-md focus:outline-none focus:bg-surface-container transition-all" placeholder="Search ticket ID, keywords..." type="text"/>
+</div>
+<button class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface transition-all flex items-center justify-center shrink-0" title="Sort and filter options" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Complaint Cards Stack -->
+<div class="space-y-space-md">
+<!-- Card A: In Progress -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">mode_fan</span>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-semibold">
+                      In Progress
+                    </span>
+<span class="font-label-sm text-label-sm text-secondary">Ticket #CC-8942</span>
+<span class="text-secondary">•</span>
+<span class="font-label-sm text-label-sm text-secondary">Submitted 2 days ago (Oct 24)</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    HVAC malfunction &amp; loud humming noise in Library Quiet Zone 3B
+                  </h2>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-space-md text-secondary font-body-md text-body-md">
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">domain</span>
+                      Facilities Management • Building 4, Floor 3
+                    </span>
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                      Assigned to Campus Ops Team
+                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between lg:justify-end gap-space-md shrink-0 lg:pl-space-md">
+<div class="flex flex-col lg:items-end">
+<span class="font-label-sm text-label-sm text-secondary">Expected Resolution</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Today by 5:00 PM</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-low group-hover:bg-primary-container group-hover:text-on-primary text-secondary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card B: Resolved (with Interactive Star Prompt) -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-tertiary shrink-0 group-hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">power</span>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-tertiary font-semibold">
+                      Resolved
+                    </span>
+<span class="font-label-sm text-label-sm text-secondary">Ticket #CC-8719</span>
+<span class="text-secondary">•</span>
+<span class="font-label-sm text-label-sm text-secondary">Resolved Oct 22 (Completed in 4h)</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Broken study booth power sockets &amp; USB-C charging stations
+                  </h2>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-space-md text-secondary font-body-md text-body-md">
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                      IT &amp; Campus Infrastructure • Science Block East
+                    </span>
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                      Audited by Electrical Division
+                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between lg:justify-end gap-space-md shrink-0 lg:pl-space-md">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-primary-container hover:text-on-primary text-on-surface font-label-md text-label-md transition-all" onclick="event.stopPropagation(); alert('Feedback form modal triggered');" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-on-primary">star</span>
+<span>Rate resolution</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-low group-hover:bg-primary-container group-hover:text-on-primary text-secondary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card C: Pending -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/40 flex items-center justify-center text-on-secondary-fixed shrink-0 group-hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">videocam_off</span>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-secondary-container/60 text-on-secondary-fixed-variant font-semibold">
+                      Pending
+                    </span>
+<span class="font-label-sm text-label-sm text-secondary">Ticket #CC-9104</span>
+<span class="text-secondary">•</span>
+<span class="font-label-sm text-label-sm text-secondary">Submitted yesterday (Oct 25)</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Classroom 204 projector flicker during CS301 lectures
+                  </h2>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-space-md text-secondary font-body-md text-body-md">
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">school</span>
+                      Academic Technology • Turing Hall
+                    </span>
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                      Under review by Department Coordinator
+                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between lg:justify-end gap-space-md shrink-0 lg:pl-space-md">
+<div class="flex flex-col lg:items-end">
+<span class="font-label-sm text-label-sm text-secondary">Priority Level</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Medium Queue</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-low group-hover:bg-primary-container group-hover:text-on-primary text-secondary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card D: Resolved (Already Rated) -->
+<div class="group bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-tertiary shrink-0 group-hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">water_drop</span>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-tertiary font-semibold">
+                      Resolved
+                    </span>
+<span class="font-label-sm text-label-sm text-secondary">Ticket #CC-8501</span>
+<span class="text-secondary">•</span>
+<span class="font-label-sm text-label-sm text-secondary">Resolved Oct 19</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Water dispenser filter replacement overdue on Dormitory B 2nd floor
+                  </h2>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-space-md text-secondary font-body-md text-body-md">
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">apartment</span>
+                      Student Housing &amp; Health • Oak Residence Hall
+                    </span>
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]">history_edu</span>
+                      Service logged by Dorm Warden
+                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between lg:justify-end gap-space-md shrink-0 lg:pl-space-md">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold">5.0</span>
+<span class="text-secondary text-xs">(Rated)</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-low group-hover:bg-primary-container group-hover:text-on-primary text-secondary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Editorial Reference Section: Live Service SLA & Support Banner -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- Resolution Times Breakdown -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="space-y-0.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Service Level Agreement</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Campus Resolution Speed</h3>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold px-2 py-1 rounded bg-surface-container-low">94.2% on-time</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">
+              Academic tech and infrastructural grievances are routed through university dispatch tiers with mandatory 48-hour response milestones.
+            </p>
+<!-- Custom Inline Micro Visualization -->
+<div class="space-y-3 pt-2">
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium">Facilities &amp; Infrastructure (4h avg)</span>
+<span class="text-secondary">98% compliance</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 98%;"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium">Classroom &amp; Academic Tech (12h avg)</span>
+<span class="text-secondary">89% compliance</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-primary-container" style="width: 89%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Escalation Notice -->
+<div class="bg-surface-container-low p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Ombudsman Direct Line</h4>
+<p class="font-body-md text-body-md text-secondary">
+                Urgent safety hazard or unresolved complaint past 7 days? Reach the Student Dean's confidential office directly.
+              </p>
+</div>
+<a class="inline-flex items-center gap-1.5 font-label-md text-label-md text-primary font-semibold hover:underline" href="#">
+<span>Contact Student Advocate</span>
+<span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</a>
+</div>
+</div>
+<!-- Empty State Reference Section (discreetly labeled) -->
+<div class="space-y-space-sm pt-space-md">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">System Component State Preview</span>
+<span class="font-label-sm text-label-sm text-secondary">Empty Feed Variant</span>
+</div>
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col items-center justify-center text-center space-y-space-md py-16 relative overflow-hidden">
+<!-- Background Watermark Campus Geometry -->
+<div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+<svg fill="none" height="300" stroke="currentColor" viewbox="0 0 100 100" width="400">
+<circle cx="50" cy="50" r="45" stroke-width="0.5"></circle>
+<polygon points="50,15 85,75 15,75" stroke-width="0.5"></polygon>
+</svg>
+</div>
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center text-secondary relative z-10">
+<span class="material-symbols-outlined text-[32px]">assignment_turned_in</span>
+</div>
+<div class="space-y-space-xs max-w-md relative z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface">No complaints yet</h3>
+<p class="font-body-md text-body-md text-secondary">
+                You have no active reports or complaints filed under this filter. Campus operations and your learning spaces are operating smoothly.
+              </p>
+</div>
+<button class="relative z-10 inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container hover:bg-primary-container hover:text-on-primary text-on-surface font-label-md text-label-md shadow-sm transition-all duration-200" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>File your first report</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Interactive Sidebar Collapse / Expand Script -->
+<script>
+  (function initSidebarToggle() {
+    const sidebar = document.getElementById('main-sidebar');
+    const wrapper = document.getElementById('main-wrapper');
+    const header = document.getElementById('main-header');
+    const sidebarBtn = document.getElementById('sidebar-toggle-btn');
+    const headerBtn = document.getElementById('header-sidebar-toggle-btn');
+    const miniRailBtn = document.getElementById('mini-rail-toggle-btn');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    let isCollapsed = false;
+
+    function toggleSidebar() {
+      isCollapsed = !isCollapsed;
+
+      if (isCollapsed) {
+        sidebar.classList.add('is-collapsed');
+        wrapper.classList.add('is-collapsed');
+        header.classList.add('is-collapsed');
+        if (miniRailBtn) {
+          miniRailBtn.classList.remove('hidden');
+          miniRailBtn.classList.add('flex');
+        }
+        if (sidebarBtn) sidebarBtn.setAttribute('title', 'Expand sidebar');
+        if (headerBtn) headerBtn.setAttribute('title', 'Expand sidebar');
+      } else {
+        sidebar.classList.remove('is-collapsed');
+        wrapper.classList.remove('is-collapsed');
+        header.classList.remove('is-collapsed');
+        if (miniRailBtn) {
+          miniRailBtn.classList.add('hidden');
+          miniRailBtn.classList.remove('flex');
+        }
+        if (sidebarBtn) sidebarBtn.setAttribute('title', 'Collapse sidebar');
+        if (headerBtn) headerBtn.setAttribute('title', 'Collapse sidebar');
+      }
+    }
+
+    if (sidebarBtn) sidebarBtn.addEventListener('click', toggleSidebar);
+    if (headerBtn) headerBtn.addEventListener('click', toggleSidebar);
+    if (miniRailBtn) miniRailBtn.addEventListener('click', toggleSidebar);
+  })();
+</script>
+</body></html>

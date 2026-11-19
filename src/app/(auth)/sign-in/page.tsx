@@ -1,15 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { signInSchema } from "@/lib/schemas";
-import { InputField } from "@/components/shared";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
+import { AuthField } from "@/components/shared";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -18,7 +15,8 @@ export default function SignInPage() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const parsed = signInSchema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
+    const formData = new FormData(e.currentTarget);
+    const parsed = signInSchema.safeParse(Object.fromEntries(formData));
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
       for (const issue of parsed.error.issues) fieldErrors[String(issue.path[0])] ??= issue.message;
@@ -27,7 +25,10 @@ export default function SignInPage() {
     }
     setErrors({});
     setLoading(true);
-    const { error } = await authClient.signIn.email(parsed.data);
+    const { error } = await authClient.signIn.email({
+      ...parsed.data,
+      rememberMe: formData.has("rememberMe"),
+    });
     setLoading(false);
     if (error) {
       toast.error(error.message ?? "Could not sign in");
@@ -38,34 +39,48 @@ export default function SignInPage() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Sign in</CardTitle>
-        <CardDescription>Enter your email and password.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={onSubmit} noValidate>
-          <FieldGroup>
-            <InputField label="Email" name="email" type="email" autoComplete="email" error={errors.email} />
-            <InputField
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              error={errors.password}
+    <div className="flex flex-col">
+      <div className="mb-6">
+        <h2 className="font-headline-lg text-headline-lg text-on-surface">Welcome back</h2>
+        <p className="mt-1 font-body-md text-body-md text-secondary">Sign in with your university credentials</p>
+      </div>
+      <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>
+        <AuthField
+          label="University Email"
+          name="email"
+          type="email"
+          placeholder="student@university.edu"
+          autoComplete="email"
+          error={errors.email}
+        />
+        <AuthField
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="••••••••"
+          autoComplete="current-password"
+          error={errors.password}
+        />
+        <div className="flex items-center justify-between pt-1">
+          <label className="flex cursor-pointer select-none items-center gap-2">
+            <input
+              type="checkbox"
+              name="rememberMe"
+              defaultChecked
+              className="h-4 w-4 cursor-pointer rounded bg-surface-container accent-primary-container"
             />
-            <Button type="submit" disabled={loading}>
-              {loading ? "Signing in..." : "Sign in"}
-            </Button>
-            <p className="text-center text-sm text-muted-foreground">
-              No account?{" "}
-              <Link href="/sign-up" className="underline underline-offset-4">
-                Sign up
-              </Link>
-            </p>
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+            <span className="font-body-md text-body-md text-secondary">Remember me</span>
+          </label>
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-container px-4 py-3 font-title-md text-body-md text-on-primary shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-primary-container-hover disabled:pointer-events-none disabled:opacity-50"
+        >
+          <span>{loading ? "Signing in..." : "Sign in to CampusConnect"}</span>
+          {loading ? null : <ArrowRight className="size-[18px]" />}
+        </button>
+      </form>
+    </div>
   );
 }

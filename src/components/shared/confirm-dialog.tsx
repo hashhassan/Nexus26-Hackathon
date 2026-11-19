@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactElement } from "react";
+import { useState, type ReactElement, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +26,9 @@ type ConfirmDialogProps = {
   destructive?: boolean;
   /** May be async; the dialog closes once it resolves. */
   onConfirm: () => void | Promise<void>;
+  /** Extra content between the description and the buttons, e.g. a reason field. */
+  children?: ReactNode;
+  confirmDisabled?: boolean;
 };
 
 export function ConfirmDialog({
@@ -38,6 +41,8 @@ export function ConfirmDialog({
   cancelLabel = "Cancel",
   destructive = false,
   onConfirm,
+  children,
+  confirmDisabled = false,
 }: ConfirmDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [pending, setPending] = useState(false);
@@ -67,9 +72,10 @@ export function ConfirmDialog({
           <DialogTitle>{title}</DialogTitle>
           {description ? <DialogDescription>{description}</DialogDescription> : null}
         </DialogHeader>
+        {children}
         <DialogFooter>
           <DialogClose render={<Button variant="outline" disabled={pending} />}>{cancelLabel}</DialogClose>
-          <Button variant={destructive ? "destructive" : "default"} onClick={handleConfirm} disabled={pending}>
+          <Button variant={destructive ? "destructive" : "default"} onClick={handleConfirm} disabled={pending || confirmDisabled}>
             {pending ? "Working..." : confirmLabel}
           </Button>
         </DialogFooter>

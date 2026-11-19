@@ -13,19 +13,70 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          String    @default("user")
-  sessions      Session[]
-  accounts      Account[]
+  id               String            @id
+  name             String
+  email            String
+  emailVerified    Boolean           @default(false)
+  image            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  role             String            @default("student")
+  department       String?
+  sessions         Session[]
+  accounts         Account[]
+  complaints       Complaint[]
+  complaintUpdates ComplaintUpdate[]
 
   @@unique([email])
   @@map("user")
+}
+
+enum Department {
+  CAFETERIA
+  LIBRARY
+  LABS_IT
+  TEACHING
+}
+
+enum ComplaintStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+model Complaint {
+  id            String            @id @default(cuid())
+  title         String
+  description   String
+  department    Department
+  issueType     String
+  status        ComplaintStatus   @default(PENDING)
+  imageUrl      String?
+  rating        Int?
+  ratingComment String?
+  studentId     String
+  student       User              @relation(fields: [studentId], references: [id])
+  updates       ComplaintUpdate[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([studentId])
+  @@index([department])
+  @@index([status])
+}
+
+model ComplaintUpdate {
+  id          String          @id @default(cuid())
+  complaintId String
+  complaint   Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  adminId     String
+  admin       User            @relation(fields: [adminId], references: [id])
+  status      ComplaintStatus
+  remark      String
+  createdAt   DateTime        @default(now())
+
+  @@index([complaintId])
 }
 
 model Session {

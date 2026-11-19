@@ -10,6 +10,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project rules
 
+## Time pressure (hackathon, hard deadline 3:00 PM)
+- Every task has a time budget in docs/Tasks.md. Pick the simplest solution that works; no refactors, no extras, no "nice to have".
+- If something takes more than 2 attempts to fix, stop and tell me instead of trying more approaches.
+
+## UI designing Rule
+- Build each screen by converting the Stitch HTML markup directly to JSX: same structure, classes, spacing and text. Don't redesign from the PNG or simplify the layout. Keep decorative/static text, badges, dividers and footers.
+- Skip only elements that imply a feature we don't have: links/buttons to non-existent pages (notifications, settings, help, forgot password, SSO), and form fields not in our data model. Replace them with nothing; don't leave dead links.
+
 ## Docs rules (keep them short, we're on a hackathon clock)
 - docs/ files are working notes, not reports. Bullets only. No intros, summaries, filler words, or repeating what's in another doc or the code.
 - Write only what changes a decision or what a future session needs. If the code already shows it, don't write it.
@@ -28,10 +36,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Override for the Next.js block above: open `node_modules/next/dist/docs/` only when an API is unclear or an error/deprecation points to it. Not before every task.
 
 ## Task sizing (Tasks.md). Total build time is 4–5 hours
-- Whole project: 8–12 tasks max, split into 3 phases:
-  - Phase 1 Core (must-have features from PRD): 4–6 tasks
-  - Phase 2 Innovation (1–2 extra features): 2–3 tasks
-  - Phase 3 Polish + deploy check: 1–2 tasks
+- Whole project: 14 tasks max, split into 3 phases:
+  - Phase 1 Frontend (all screens with mock data): 7 tasks
+  - Phase 2 Backend (seed, queries, actions, guards): 6 tasks
+  - Phase 3 Polish + deploy check: 1 task
 - Each task = one complete, testable feature slice, about 15–30 min
   (e.g. "Projects: schema + queries + actions + list/create pages").
 - Don't split a feature into tiny tasks ("add button", "add types"). Don't merge two features into one task either.
@@ -65,7 +73,7 @@ Next.js App Router + TypeScript, Tailwind v4, shadcn/ui (Base UI based), Prisma 
 
 ## Workflow
 - One task per session. Use plan mode only for multi-file work.
-- Within each task: build the UI with mock data typed from Prisma types first, then wire queries/actions.
+- Phase 1 screens use typed mock data from src/lib/mock-data.ts. Phase 2 replaces it with real queries/actions without redesigning the UI. Delete mock-data.ts when nothing imports it.
 - After each task run `npm run lint` and `npx tsc --noEmit`.
 - Update `docs/Tasks.md` and `docs/Memory.md` when a task finishes.
 
@@ -74,6 +82,7 @@ Next.js App Router + TypeScript, Tailwind v4, shadcn/ui (Base UI based), Prisma 
 - On the first Stitch screen, map its colors/fonts to theme tokens in `globals.css` once. After that, keep Stitch's layout and spacing classes 1:1 but swap hard-coded colors for tokens.
 - The Stitch HTML wins over `docs/Design.md` when they differ.
 - Screenshot the result and compare it to the PNG (max 2 loops).
+- Build only what Tasks.md lists. Skip Stitch extras such as notifications, settings, extra form fields, SLA/academic-year labels and decorative info boxes.
 
 ## Don'ts
 - Never read `.env` or anything in `src/generated/`.

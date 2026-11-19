@@ -8,7 +8,8 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   user: {
     additionalFields: {
-      role: { type: "string", defaultValue: "user", input: false },
+      role: { type: "string", defaultValue: "student", input: false },
+      department: { type: "string", required: false, input: false },
     },
   },
   plugins: [nextCookies()], // keep last

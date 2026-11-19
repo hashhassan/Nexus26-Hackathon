@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#93000a","error-container":"#ffdad6","surface-variant":"#dae2fd","primary-fixed-dim":"#c3c0ff","on-primary-fixed":"#0f0069","surface":"#faf8ff","on-secondary-fixed-variant":"#38485d","on-tertiary-fixed":"#100563","tertiary":"#231f74","secondary-container":"#d0e1fb","surface-container-high":"#e2e7ff","tertiary-fixed-dim":"#c3c0ff","surface-container-low":"#f2f3ff","on-background":"#131b2e","inverse-on-surface":"#eef0ff","surface-dim":"#d2d9f4","on-primary-container":"#a9a7ff","on-tertiary":"#ffffff","surface-container-lowest":"#ffffff","on-secondary-fixed":"#0b1c30","inverse-primary":"#c3c0ff","error":"#ba1a1a","tertiary-fixed":"#e2dfff","primary-fixed":"#e2dfff","on-surface-variant":"#464553","tertiary-container":"#3a388b","on-secondary":"#ffffff","surface-bright":"#faf8ff","background":"#faf8ff","on-primary":"#ffffff","on-surface":"#131b2e","on-primary-fixed-variant":"#3b35a7","inverse-surface":"#283044","on-tertiary-container":"#a9a7ff","surface-container-highest":"#dae2fd","on-secondary-container":"#54647a","secondary":"#505f76","secondary-fixed-dim":"#b7c8e1","outline-variant":"#c8c4d5","surface-container":"#eaedff","primary-container":"#3730a3","primary":"#1f108e","outline":"#777584","on-tertiary-fixed-variant":"#3e3c8f","on-error":"#ffffff","secondary-fixed":"#d3e4fe","surface-tint":"#544fc0"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","margin":"3rem","gutter-compact":"1rem","space-xs":"0.25rem","space-md":"1rem"},"fontFamily":{"label-md":["Inter"],"display-lg":["Newsreader"],"label-sm":["Inter"],"body-md":["Inter"],"headline-md":["Newsreader"],"title-md":["Inter"],"display-md":["Newsreader"],"body-lg":["Inter"],"headline-lg":["Newsreader"]},"fontSize":{"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"500"}],"title-md":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"display-md":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}};</script>
+<style>
+  #main-sidebar.is-collapsed {
+    width: 4.5rem;
+  }
+  #main-sidebar.is-collapsed .sidebar-text,
+  #main-sidebar.is-collapsed .sidebar-full-info,
+  #main-sidebar.is-collapsed .sidebar-badge {
+    display: none !important;
+  }
+  #main-sidebar.is-collapsed .sidebar-nav-item {
+    justify-content: center !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  #main-sidebar.is-collapsed .sidebar-header-box {
+    justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  #main-sidebar.is-collapsed .sidebar-user-box {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  #main-sidebar.is-collapsed .sidebar-user-actions {
+    display: none;
+  }
+  #main-wrapper.is-collapsed {
+    padding-left: 4.5rem;
+  }
+  #main-header.is-collapsed {
+    left: 4.5rem;
+  }
+</style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- Collapsible Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-[#E7E5E4] transition-all duration-300 ease-in-out" id="main-sidebar">
+<div class="flex flex-col">
+<!-- Sidebar Header with Logo & Toggle Button -->
+<div class="px-space-md pt-space-lg pb-space-md flex items-center justify-between border-b border-[#E7E5E4]/60 sidebar-header-box">
+<div class="flex items-center gap-space-sm min-w-0 overflow-hidden">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">account_balance</span>
+</div>
+<div class="flex flex-col sidebar-text min-w-0">
+<span class="font-headline-md text-headline-md font-semibold text-on-surface leading-tight truncate">CampusConnect</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary px-space-xs py-0.5 rounded bg-secondary-container/40 w-fit mt-1">Student Portal</span>
+</div>
+</div>
+<!-- Toggle Button inside Sidebar header -->
+<button aria-label="Collapse sidebar" class="sidebar-text p-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center shrink-0" id="sidebar-toggle-btn" title="Collapse sidebar" type="button">
+<span class="material-symbols-outlined text-[20px]" id="toggle-icon">menu_open</span>
+</button>
+</div>
+<!-- Navigation items -->
+<div class="px-space-md py-space-sm">
+<nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm">
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="my-complaints" href="#" title="My Complaints">
+<span class="font-label-md text-label-md sidebar-text truncate">My Complaints</span>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            My Complaints
+          </div>
+</a>
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="new-complaint" href="#" title="New Complaint">
+<span class="font-label-md text-label-md sidebar-text truncate">New Complaint</span>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            New Complaint
+          </div>
+</a>
+<a aria-current="page" class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-semibold shadow-sm" data-path="notifications" href="#" title="Notifications">
+<div class="flex items-center justify-between w-full min-w-0">
+<span class="font-label-md text-label-md sidebar-text truncate">Notifications</span>
+<span class="sidebar-badge px-1.5 py-0.5 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container">3</span>
+</div>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            Notifications (3)
+          </div>
+</a>
+<a class="sidebar-nav-item relative group flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="profile-settings" href="#" title="Profile &amp; Settings">
+<span class="font-label-md text-label-md sidebar-text truncate">Profile &amp; Settings</span>
+<div class="hidden group-hover:block absolute left-full ml-2 px-2.5 py-1 bg-inverse-surface text-inverse-on-surface text-label-sm rounded-md whitespace-nowrap shadow-md z-50 pointer-events-none font-medium">
+            Profile &amp; Settings
+          </div>
+</a>
+</nav>
+</div>
+<!-- Architectural Line Vector Motif in Sidebar -->
+<div class="sidebar-text px-space-md mt-4">
+<div class="p-space-sm rounded-xl bg-surface-container-low border border-[#E7E5E4]/80 flex flex-col gap-2">
+<div class="flex items-center justify-between text-secondary">
+<span class="font-label-sm text-[10px] uppercase tracking-wider font-semibold">Campus Quad Hub</span>
+<span class="material-symbols-outlined text-[14px]">school</span>
+</div>
+<svg class="w-full h-14 text-primary/30" fill="none" viewbox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 50H190" stroke="currentColor" stroke-linecap="round" stroke-width="1.2"></path>
+<path d="M25 50V30L55 20L85 30V50" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<path d="M40 50V38H50V50" stroke="currentColor" stroke-width="1"></path>
+<path d="M85 35H115V50" stroke="currentColor" stroke-width="1.2"></path>
+<path d="M100 20V35" stroke="currentColor" stroke-width="1.2"></path>
+<circle cx="100" cy="18" fill="currentColor" r="2"></circle>
+<path d="M115 50V25L145 15L175 25V50" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+<line stroke="currentColor" stroke-width="1" x1="130" x2="130" y1="30" y2="40"></line>
+<line stroke="currentColor" stroke-width="1" x1="160" x2="160" y1="30" y2="40"></line>
+<circle cx="55" cy="27" fill="currentColor" r="1.5"></circle>
+</svg>
+<span class="text-[11px] text-secondary leading-tight">University Division of Student Support &amp; Facilities</span>
+</div>
+</div>
+</div>
+<!-- Bottom User Profile Card & Expand Toggle on Mini Rail -->
+<div class="p-space-md border-t border-[#E7E5E4] bg-surface-container-lowest flex flex-col gap-2">
+<button aria-label="Expand sidebar" class="hidden w-full py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface items-center justify-center transition-all" id="mini-rail-toggle-btn" title="Expand sidebar" type="button">
+<span class="material-symbols-outlined text-[20px]">dock_to_right</span>
+</button>
+<div class="sidebar-user-box flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-on-primary font-label-md text-label-md">AR</div>
+<div class="sidebar-full-info flex flex-col truncate">
+<span class="font-label-md text-label-md text-on-surface truncate font-medium">Ali Reza</span>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-1.5 py-0.5 rounded-full w-fit">Student</span>
+</div>
+</div>
+<a class="sidebar-user-actions text-on-surface-variant hover:text-error transition-colors p-1 flex items-center justify-center rounded-lg hover:bg-surface-container" data-path="sign-out" href="#" title="Sign Out">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Wrapper with Left Margin Matching Sidebar State -->
+<div class="pl-64 flex flex-col min-h-screen transition-all duration-300 ease-in-out" id="main-wrapper">
+<!-- Top App Header -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 flex items-center justify-between px-gutter border-b border-[#E7E5E4] transition-all duration-300 ease-in-out" id="main-header">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Toggle sidebar" class="p-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-center" id="header-sidebar-toggle-btn" title="Toggle sidebar layout" type="button">
+<span class="material-symbols-outlined text-[22px]">view_sidebar</span>
+</button>
+<span class="hidden sm:inline-block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Campus Academic Oversight System</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+</div>
+</div>
+</header>
+<!-- Main View Area -->
+<main class="w-full pt-16 px-gutter lg:px-margin py-space-lg flex-1 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Navigation & Header Meta -->
+<div class="w-full max-w-4xl mx-auto flex flex-col gap-6 pb-6">
+<!-- Breadcrumb Header Area -->
+<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between pt-1">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Student Portal</span>
+<span class="text-secondary/40 text-xs font-semibold">/</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Activity &amp; Alerts</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-normal tracking-tight">Notifications</h1>
+<p class="font-body-md text-body-md text-secondary max-w-xl">
+          Stay updated on real-time department remarks, investigation status shifts, and ticket resolutions.
+        </p>
+</div>
+<!-- Header Action -->
+<div class="flex items-center shrink-0">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all duration-200 text-label-md font-label-md" id="mark-all-read-btn">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span>Mark all as read</span>
+</button>
+</div>
+</div>
+<!-- Filter Segmented Controls -->
+<div class="flex items-center justify-between border-b-0 pt-2">
+<div class="inline-flex p-1 rounded-lg bg-surface-container-low shadow-sm" role="tablist">
+<button class="px-4 py-1.5 rounded-md text-label-md font-label-md transition-all duration-150 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5" id="filter-all">
+<span>All</span>
+<span class="text-xs opacity-90 px-1.5 py-0.2 rounded-full bg-white/20">6</span>
+</button>
+<button class="px-4 py-1.5 rounded-md text-label-md font-label-md text-secondary hover:text-on-surface transition-all duration-150 flex items-center gap-1.5" id="filter-unread">
+<span>Unread</span>
+<span class="text-xs px-1.5 py-0.2 rounded-full bg-error-container text-on-error-container font-semibold" id="unread-counter-pill">3</span>
+</button>
+</div>
+<div class="hidden sm:flex items-center gap-2 text-label-sm font-label-sm text-secondary">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+<span>Live sync active</span>
+</div>
+</div>
+<!-- Primary Notification Feed -->
+<div class="flex flex-col gap-8 mt-2" id="notifications-stream">
+<!-- Group 1: Today -->
+<section class="flex flex-col gap-3 notification-group" id="group-today">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Today — Oct 26</span>
+<span class="inline-block w-1 h-1 rounded-full bg-secondary/50"></span>
+<span class="text-label-sm font-label-sm text-secondary group-unread-count">3 unread updates</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5">
+<!-- Row 1: In Progress (Unread) -->
+<article class="notification-item unread group relative bg-surface-container-lowest rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-1" data-unread="true">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-secondary-container/60 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">update</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-semibold text-primary">Library Administration</span> marked <span class="font-medium text-on-surface underline decoration-outline-variant underline-offset-4 decoration-1">“Core textbooks are 10 years old”</span> as <span class="inline-flex items-center font-semibold text-primary">In Progress</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">25m ago</time>
+<span aria-label="Unread" class="unread-dot w-2 h-2 rounded-full bg-primary"></span>
+</div>
+</div>
+<div class="bg-surface-container-low/70 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “Work order #WO-4512 opened with Acquisitions department. Reviewing current syllabus reserve copies.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8842
+                  </span>
+<span>•</span>
+<span>Academics &amp; Library</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Row 2: Remark (Unread) -->
+<article class="notification-item unread group relative bg-surface-container-lowest rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-2" data-unread="true">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-semibold text-primary">Facilities Management</span> added a remark on <span class="font-medium text-on-surface underline decoration-outline-variant underline-offset-4 decoration-1">“HVAC malfunction &amp; excessive noise on 3rd floor study carrels”</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">2h ago</time>
+<span aria-label="Unread" class="unread-dot w-2 h-2 rounded-full bg-primary"></span>
+</div>
+</div>
+<div class="bg-surface-container-low/70 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “Technicians have completed sound dampening baffle installation. Awaiting decibel check verification.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8819
+                  </span>
+<span>•</span>
+<span>Campus Infrastructure</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Row 3: Resolved (Unread) -->
+<article class="notification-item unread group relative bg-surface-container-lowest rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-3" data-unread="true">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-fixed flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-semibold text-primary">Campus IT Services</span> marked <span class="font-medium text-on-surface underline decoration-outline-variant underline-offset-4 decoration-1">“Broken study booth power sockets &amp; USB-C hub”</span> as <span class="inline-flex items-center font-semibold text-on-secondary-fixed">Resolved</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">4h ago</time>
+<span aria-label="Unread" class="unread-dot w-2 h-2 rounded-full bg-primary"></span>
+</div>
+</div>
+<div class="bg-surface-container-low/70 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “All four duplex outlets and USB-C power delivery hubs replaced and load-tested in Science Commons Pod 12.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8790
+                  </span>
+<span>•</span>
+<span>IT Infrastructure</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Group 2: Earlier This Week -->
+<section class="flex flex-col gap-3 notification-group" id="group-earlier">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Earlier This Week</span>
+<span class="text-label-sm font-label-sm text-secondary">Archived updates</span>
+</div>
+<div class="flex flex-col gap-2.5">
+<!-- Row 4: Resolved (Read) -->
+<article class="notification-item read group relative bg-surface-container-lowest/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-4" data-unread="false">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-medium text-on-surface">Student Housing &amp; Health</span> marked <span class="text-on-surface-variant">“Water dispenser filter replacement overdue on Dorm B”</span> as <span class="font-medium text-secondary">Resolved</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">Oct 24</time>
+</div>
+</div>
+<div class="bg-surface-container-low/50 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “Filter cartridge swapped (Batch #F-992). Water quality sensors calibrated and cleared.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8650
+                  </span>
+<span>•</span>
+<span>Residential Facilities</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Row 5: Rejected (Read) -->
+<article class="notification-item read group relative bg-surface-container-lowest/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-5" data-unread="false">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-error-container/60 text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-medium text-on-surface">Academic Registrar</span> marked <span class="text-on-surface-variant">“Duplicate course roster discrepancy in Portal”</span> as <span class="font-medium text-error">Rejected</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">Oct 22</time>
+</div>
+</div>
+<div class="bg-surface-container-low/50 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “Cross-listed section resolved automatically via Banner sync. Student schedule is current.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8511
+                  </span>
+<span>•</span>
+<span>Academic Affairs</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Row 6: In Progress (Read) -->
+<article class="notification-item read group relative bg-surface-container-lowest/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" data-id="ntf-6" data-unread="false">
+<div class="flex items-start gap-4">
+<!-- Visual Icon Token -->
+<div class="w-10 h-10 rounded-xl bg-secondary-container/40 text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+<!-- Content Block -->
+<div class="flex-1 min-w-0 flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-3">
+<div class="text-body-md font-body-md text-on-surface">
+<span class="font-medium text-on-surface">Dining Services</span> marked <span class="text-on-surface-variant">“Cafeteria cold storage temperature sensor fluctuation”</span> as <span class="font-medium text-secondary">In Progress</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 pt-0.5">
+<time class="font-label-sm text-label-sm text-secondary">Oct 20</time>
+</div>
+</div>
+<div class="bg-surface-container-low/50 rounded-lg p-3 text-body-md font-body-md text-on-surface-variant italic">
+                  “Compressor calibration scheduled with commercial refrigeration contractor.”
+                </div>
+<div class="flex items-center gap-3 pt-1 text-label-sm font-label-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">tag</span>
+                    TKT-8488
+                  </span>
+<span>•</span>
+<span>Campus Dining Services</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</section>
+</div>
+<!-- System Component Preview — All Caught Up State -->
+<div class="mt-8 flex flex-col gap-3">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary/80 font-semibold">
+          System Component Preview — All Caught Up State
+        </span>
+<span class="text-label-sm font-label-sm text-secondary/60">Component Reference</span>
+</div>
+<div class="w-full rounded-2xl bg-surface-container-lowest p-8 sm:p-10 shadow-sm flex flex-col items-center justify-center text-center">
+<!-- Circular Bell Icon Container with subtle decoration -->
+<div class="relative w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined text-[30px]">notifications_active</span>
+<span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[11px] text-primary">check</span>
+</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-medium mb-1">
+          You're all caught up
+        </h3>
+<p class="font-body-md text-body-md text-secondary max-w-md mb-6">
+          No unread alerts or ticket updates. We'll notify you as soon as department staff review or update your filed inquiries.
+        </p>
+<a class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all duration-150 shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">assignment</span>
+<span>Check My Complaints</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+    (function initNotificationsLogic() {
+      const allTab = document.getElementById('filter-all');
+      const unreadTab = document.getElementById('filter-unread');
+      const markAllReadBtn = document.getElementById('mark-all-read-btn');
+      const unreadBadge = document.getElementById('unread-counter-pill');
+      const items = document.querySelectorAll('.notification-item');
+      const earlierGroup = document.getElementById('group-earlier');
+
+      let currentFilter = 'all';
+
+      function updateUnreadVisuals() {
+        const remainingUnread = document.querySelectorAll('.notification-item[data-unread="true"]').length;
+        if (unreadBadge) {
+          unreadBadge.textContent = remainingUnread;
+          if (remainingUnread === 0) {
+            unreadBadge.classList.remove('bg-error-container', 'text-on-error-container');
+            unreadBadge.classList.add('bg-surface-container', 'text-secondary');
+          }
+        }
+      }
+
+      function filterItems(mode) {
+        currentFilter = mode;
+        if (mode === 'all') {
+          allTab.className = "px-4 py-1.5 rounded-md text-label-md font-label-md transition-all duration-150 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5";
+          unreadTab.className = "px-4 py-1.5 rounded-md text-label-md font-label-md text-secondary hover:text-on-surface transition-all duration-150 flex items-center gap-1.5";
+          items.forEach(el => el.style.display = 'block');
+          if (earlierGroup) earlierGroup.style.display = 'flex';
+        } else {
+          unreadTab.className = "px-4 py-1.5 rounded-md text-label-md font-label-md transition-all duration-150 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5";
+          allTab.className = "px-4 py-1.5 rounded-md text-label-md font-label-md text-secondary hover:text-on-surface transition-all duration-150 flex items-center gap-1.5";
+          items.forEach(el => {
+            if (el.getAttribute('data-unread') === 'true') {
+              el.style.display = 'block';
+            } else {
+              el.style.display = 'none';
+            }
+          });
+          if (earlierGroup) earlierGroup.style.display = 'none';
+        }
+      }
+
+      allTab?.addEventListener('click', () => filterItems('all'));
+      unreadTab?.addEventListener('click', () => filterItems('unread'));
+
+      items.forEach(item => {
+        item.addEventListener('click', function() {
+          if (this.getAttribute('data-unread') === 'true') {
+            this.setAttribute('data-unread', 'false');
+            this.classList.remove('unread');
+            this.classList.add('read');
+            const dot = this.querySelector('.unread-dot');
+            if (dot) dot.remove();
+            updateUnreadVisuals();
+            if (currentFilter === 'unread') {
+              this.style.display = 'none';
+            }
+          }
+        });
+      });
+
+      markAllReadBtn?.addEventListener('click', function() {
+        items.forEach(item => {
+          item.setAttribute('data-unread', 'false');
+          item.classList.remove('unread');
+          item.classList.add('read');
+          const dot = item.querySelector('.unread-dot');
+          if (dot) dot.remove();
+        });
+        updateUnreadVisuals();
+        if (currentFilter === 'unread') {
+          filterItems('unread');
+        }
+      });
+    })();
+  </script>
+</div></main>
+</div>
+<!-- Interactive Sidebar Collapse / Expand Script -->
+<script>
+  (function initSidebarToggle() {
+    const sidebar = document.getElementById('main-sidebar');
+    const wrapper = document.getElementById('main-wrapper');
+    const header = document.getElementById('main-header');
+    const sidebarBtn = document.getElementById('sidebar-toggle-btn');
+    const headerBtn = document.getElementById('header-sidebar-toggle-btn');
+    const miniRailBtn = document.getElementById('mini-rail-toggle-btn');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    let isCollapsed = false;
+
+    function toggleSidebar() {
+      isCollapsed = !isCollapsed;
+
+      if (isCollapsed) {
+        sidebar.classList.add('is-collapsed');
+        wrapper.classList.add('is-collapsed');
+        header.classList.add('is-collapsed');
+        if (miniRailBtn) {
+          miniRailBtn.classList.remove('hidden');
+          miniRailBtn.classList.add('flex');
+        }
+        if (sidebarBtn) sidebarBtn.setAttribute('title', 'Expand sidebar');
+        if (headerBtn) headerBtn.setAttribute('title', 'Expand sidebar');
+      } else {
+        sidebar.classList.remove('is-collapsed');
+        wrapper.classList.remove('is-collapsed');
+        header.classList.remove('is-collapsed');
+        if (miniRailBtn) {
+          miniRailBtn.classList.add('hidden');
+          miniRailBtn.classList.remove('flex');
+        }
+        if (sidebarBtn) sidebarBtn.setAttribute('title', 'Collapse sidebar');
+        if (headerBtn) headerBtn.setAttribute('title', 'Collapse sidebar');
+      }
+    }
+
+    if (sidebarBtn) sidebarBtn.addEventListener('click', toggleSidebar);
+    if (headerBtn) headerBtn.addEventListener('click', toggleSidebar);
+    if (miniRailBtn) miniRailBtn.addEventListener('click', toggleSidebar);
+  })();
+</script>
+</body></html>

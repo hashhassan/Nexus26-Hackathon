@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#93000a","error-container":"#ffdad6","surface-variant":"#dae2fd","primary-fixed-dim":"#c3c0ff","on-primary-fixed":"#0f0069","surface":"#faf8ff","on-secondary-fixed-variant":"#38485d","on-tertiary-fixed":"#100563","tertiary":"#231f74","secondary-container":"#d0e1fb","surface-container-high":"#e2e7ff","tertiary-fixed-dim":"#c3c0ff","surface-container-low":"#f2f3ff","on-background":"#131b2e","inverse-on-surface":"#eef0ff","surface-dim":"#d2d9f4","on-primary-container":"#a9a7ff","on-tertiary":"#ffffff","surface-container-lowest":"#ffffff","on-secondary-fixed":"#0b1c30","inverse-primary":"#c3c0ff","error":"#ba1a1a","tertiary-fixed":"#e2dfff","primary-fixed":"#e2dfff","on-surface-variant":"#464553","tertiary-container":"#3a388b","on-secondary":"#ffffff","surface-bright":"#faf8ff","background":"#faf8ff","on-primary":"#ffffff","on-surface":"#131b2e","on-primary-fixed-variant":"#3b35a7","inverse-surface":"#283044","on-tertiary-container":"#a9a7ff","surface-container-highest":"#dae2fd","on-secondary-container":"#54647a","secondary":"#505f76","secondary-fixed-dim":"#b7c8e1","outline-variant":"#c8c4d5","surface-container":"#eaedff","primary-container":"#3730a3","primary":"#1f108e","outline":"#777584","on-tertiary-fixed-variant":"#3e3c8f","on-error":"#ffffff","secondary-fixed":"#d3e4fe","surface-tint":"#544fc0"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","margin":"3rem","gutter-compact":"1rem","space-xs":"0.25rem","space-md":"1rem"},"fontFamily":{"label-md":["Inter"],"display-lg":["Newsreader"],"label-sm":["Inter"],"body-md":["Inter"],"headline-md":["Newsreader"],"title-md":["Inter"],"display-md":["Newsreader"],"body-lg":["Inter"],"headline-lg":["Newsreader"]},"fontSize":{"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"500"}],"title-md":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"display-md":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-[#E7E5E4]"><div class="flex flex-col"><div class="px-gutter pt-space-lg pb-space-md flex items-center gap-space-sm"><div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[24px]">account_balance</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md font-semibold text-on-surface leading-tight">CampusConnect</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary px-space-xs py-0.5 rounded bg-secondary-container/40 w-fit mt-1">Student Portal</span></div></div><div class="px-space-md py-space-sm"><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="my-complaints" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">assignment_late</span><span class="font-label-md text-label-md">My Complaints</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="new-complaint" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">add_circle</span><span class="font-label-md text-label-md">New Complaint</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="notifications" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="font-label-md text-label-md">Notifications</span></div><span class="px-1.5 py-0.5 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container">3</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-md text-label-md">Settings</span></div></a></nav></div></div><div class="p-space-md border-t border-[#E7E5E4] bg-surface-container-lowest"><div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-on-primary font-label-md text-label-md">AR</div><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-on-surface truncate font-medium">Ali Reza</span><span class="font-label-sm text-label-sm text-secondary bg-surface-container px-1.5 py-0.5 rounded-full w-fit">Student</span></div></div><a class="text-on-surface-variant hover:text-error transition-colors p-1 flex items-center justify-center rounded-lg hover:bg-surface-container" data-path="sign-out" href="#" title="Sign Out"><span class="material-symbols-outlined text-[20px]">logout</span></a></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 flex items-center justify-end px-gutter border-b border-[#E7E5E4]"><div class="flex items-center gap-space-md"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 px-gutter lg:px-margin py-space-lg flex-1 bg-surface"><div class="flex flex-col w-full pb-space-xl">
+<!-- Top Breadcrumb & Status Navigation Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<a class="inline-flex items-center gap-1.5 font-label-md text-label-md text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Complaints
+      </a>
+<span class="text-secondary/40">/</span>
+<div class="inline-flex items-center gap-2 bg-surface-container px-2.5 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">#CC-1042</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-lowest text-secondary hover:text-on-surface shadow-sm transition-all text-label-md font-label-md">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span>Share</span>
+</button>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-lowest text-secondary hover:text-on-surface shadow-sm transition-all text-label-md font-label-md">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>Print File</span>
+</button>
+</div>
+</div>
+<!-- Ticket Header Hero Title & Meta Strip -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
+<div class="flex flex-col gap-space-sm">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/70 text-on-secondary-fixed font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+          In Progress
+        </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">local_library</span>
+          Library &amp; Study Facilities
+        </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">engineering</span>
+          Facilities Management
+        </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-medium text-on-surface tracking-tight mt-1">
+        HVAC malfunction &amp; excessive noise on 3rd floor study carrels
+      </h1>
+<!-- Meta Strip -->
+<div class="flex flex-wrap items-center gap-y-2 gap-x-space-lg pt-space-xs text-secondary font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-label-sm">
+            AR
+          </div>
+<span>Submitted by <strong class="text-on-surface font-medium">Ali Reza</strong> <span class="text-on-surface-variant">(#ST-89042)</span></span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[17px] text-secondary">calendar_today</span>
+<span>Oct 24, 2024 at 10:14 AM (2 days ago)</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>Target resolution: Today by 5:00 PM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2-Column Responsive Workspace Grid (8fr / 4fr) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN (Wide: 8 Cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg min-w-0">
+<!-- Issue Description Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Issue Description &amp; Context</h2>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Section 01</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+          The central air circulation unit in Zone 3B of W.E.B. Du Bois Central Library has been making a continuous mechanical grinding noise exceeding 65dB since yesterday morning. The room temperature has also surged past 78°F, making the silent study carrels unusable during midterm prep week.
+        </p>
+<!-- Location & Urgency Chips -->
+<div class="flex flex-wrap gap-2 pt-1">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface text-label-md font-label-md">
+<span class="material-symbols-outlined text-[18px] text-primary">pin_drop</span>
+<span>W.E.B. Du Bois Library, Level 3 - East Wing, Carrels #34A–#38F</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error-container/70 text-on-error-container text-label-md font-label-md font-medium">
+<span class="material-symbols-outlined text-[18px]">priority_high</span>
+<span>High Priority • Acoustic Disruption</span>
+</div>
+</div>
+<!-- Attached Visual Evidence Box -->
+<div class="mt-space-xs flex flex-col gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Attached Visual Evidence (1 File)</span>
+<div class="group relative overflow-hidden rounded-xl bg-surface-container-low p-3 flex flex-col sm:flex-row items-center gap-space-md hover:bg-surface-container transition-all">
+<div class="relative w-full sm:w-36 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Close-up photograph of an overhead industrial HVAC ceiling air diffuser vent with exposed metal ductwork and acoustic measurement sensor in an academic library reading room, soft warm archival lighting, modern university interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCij_0ECkaYScP6ga1z0-0tJktz43kR70OM3PcT0OnUZv2Sb6SFfTbX1y9vhfObRHI5vIHN_9eEDHAaw2UsGUka45rGWY8QYBjRMYb7eyjLiNhfmTTYzyf2-2DolrFG-GYakcBAvn-_GKGCjxzXIirC4zPvQoFs1ZhOb9QryDb0PCyk4DssxICkobt2YnEGWoneFtq9l6XkR1NAU3CzaBt9C3ZFT8KgWeDb89q9Kezg"/>
+<div class="absolute inset-0 bg-on-surface/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-surface-container-lowest text-[24px]">zoom_in</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0 flex-1 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">image</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">hvac_unit_noise_recording_and_vent.png</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary mt-0.5">3.4 MB • High Resolution PNG • Captured Oct 24, 09:58 AM</span>
+<div class="flex items-center gap-space-sm mt-3">
+<button class="inline-flex items-center gap-1 text-label-sm font-label-sm text-primary hover:underline">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                  Preview Full View
+                </button>
+<span class="text-secondary/40">•</span>
+<button class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                  Download Archive
+                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Responses & Department Remarks Thread -->
+<section class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Activity &amp; Department Responses</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold">3 Entries</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Ordered chronologically</span>
+</div>
+<!-- Thread Entry 1: Student Ticket Creation -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-md items-start">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md flex-shrink-0">
+            AR
+          </div>
+<div class="flex flex-col gap-1 flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Ali Reza</span>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-full">Student Initiator</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Oct 24, 10:14 AM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+              Submitted ticket with initial audio log and requested urgent dampening before quiet study hours commence this afternoon.
+            </p>
+</div>
+</div>
+<!-- Thread Entry 2: Department Response (Marcus Vance) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-md items-start">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md flex-shrink-0">
+            MV
+          </div>
+<div class="flex flex-col gap-1 flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Marcus Vance</span>
+<span class="font-label-sm text-label-sm text-on-secondary-fixed bg-secondary-fixed px-2 py-0.5 rounded-full font-medium">
+                  Facilities Operations Lead • Campus Infrastructure
+                </span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Oct 24, 11:30 AM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-relaxed">
+              Ticket triaged and routed to mechanical technician team. Work order <strong class="text-on-surface font-medium">#WO-4482</strong> dispatched to inspection crew for Zone 3B acoustic &amp; damper analysis. We will take decibel readings shortly.
+            </p>
+<div class="mt-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary bg-surface-container-low px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">link</span> Work Order linked: WO-4482
+              </span>
+</div>
+</div>
+</div>
+<!-- Thread Entry 3: Update Note (Elena Rostova) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-md items-start">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center font-label-md text-label-md flex-shrink-0">
+            ER
+          </div>
+<div class="flex flex-col gap-1 flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Elena Rostova</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-fixed bg-tertiary-fixed px-2 py-0.5 rounded-full font-medium">
+                  Library Floor Supervisor • Library Administration
+                </span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Oct 25, 09:15 AM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-relaxed">
+              Sound dampening barriers temporarily stationed around carrels #34-#38. Technicians are currently replacing the worn blower belt and recalibrating the VAV damper controller. Expect completion and sound verification by late afternoon.
+            </p>
+<div class="mt-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-primary bg-primary-fixed/50 px-2 py-0.5 rounded font-medium">
+<span class="material-symbols-outlined text-[14px]">build</span> Parts Replacement in Progress
+              </span>
+</div>
+</div>
+</div>
+</section>
+<!-- Rate this Resolution Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Rate this resolution</h2>
+<p class="font-body-md text-body-md text-secondary mt-1">
+              Help us improve campus services. How satisfied are you with the resolution speed and communication?
+            </p>
+</div>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">hotel_class</span>
+</div>
+</div>
+<!-- Star Rating Widget -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center gap-2" id="star-rating-group">
+<button class="star-btn text-surface-dim hover:text-amber-500 transition-colors focus:outline-none" data-value="1" title="1 Star - Poor" type="button">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="star-btn text-surface-dim hover:text-amber-500 transition-colors focus:outline-none" data-value="2" title="2 Stars - Fair" type="button">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="star-btn text-surface-dim hover:text-amber-500 transition-colors focus:outline-none" data-value="3" title="3 Stars - Good" type="button">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="star-btn text-surface-dim hover:text-amber-500 transition-colors focus:outline-none" data-value="4" title="4 Stars - Very Good" type="button">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="star-btn text-surface-dim hover:text-amber-500 transition-colors focus:outline-none" data-value="5" title="5 Stars - Excellent" type="button">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<span class="font-label-md text-label-md text-secondary ml-3" id="rating-label">Click to rate</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Optional Student Feedback</label>
+<textarea class="w-full rounded-lg bg-surface-container-lowest p-3 font-body-md text-body-md text-on-surface placeholder:text-secondary/60 focus:bg-surface-container-lowest transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Optional feedback for Facilities Management and Library staff..." rows="3"></textarea>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+            Anonymous option available in settings
+          </span>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all hover:-translate-y-0.5 shadow-sm active:translate-y-0">
+<span class="material-symbols-outlined text-[18px]">send</span>
+            Submit Rating
+          </button>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN (Narrow: 4 Cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Vertical Resolution Progress Timeline Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">timeline</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Resolution Progress</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container-low px-2 py-0.5 rounded-full">Step 3 of 4</span>
+</div>
+<!-- Vertical Stepper -->
+<div class="relative pl-6 flex flex-col gap-6 my-2">
+<!-- Continuous Track Line -->
+<div class="absolute left-2.5 top-3 bottom-4 w-0.5 bg-surface-container-high -z-0"></div>
+<!-- Step 1: Done -->
+<div class="relative flex items-start gap-3">
+<div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm z-10">
+<span class="material-symbols-outlined text-[13px] font-bold">check</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Submitted</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono">Oct 24, 10:14 AM</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Automated confirmation generated</span>
+</div>
+</div>
+<!-- Step 2: Done -->
+<div class="relative flex items-start gap-3">
+<div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm z-10">
+<span class="material-symbols-outlined text-[13px] font-bold">check</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">In Review</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono">Oct 24, 11:30 AM</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Triaged by Facilities Operations</span>
+</div>
+</div>
+<!-- Step 3: Current Active (Pulsing) -->
+<div class="relative flex items-start gap-3">
+<div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-primary-container flex items-center justify-center text-on-primary ring-4 ring-primary-fixed/50 z-10 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-primary">In Progress</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Active</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface font-medium text-xs mt-0.5">Oct 25, 09:15 AM • In technician queue</span>
+<span class="font-label-sm text-label-sm text-secondary mt-0.5">Work Order #WO-4482 active</span>
+</div>
+</div>
+<!-- Step 4: Future -->
+<div class="relative flex items-start gap-3 opacity-60">
+<div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-secondary z-10">
+<span class="material-symbols-outlined text-[13px]">radio_button_unchecked</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Resolved</span>
+</div>
+<span class="font-body-md text-body-md text-secondary text-xs mt-0.5">Expected: Today by 5:00 PM</span>
+</div>
+</div>
+</div>
+<!-- Institutional Metric SLA Card -->
+<div class="mt-space-xs p-3 rounded-lg bg-surface-container-low flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-primary flex-shrink-0 shadow-xs">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Institutional Target</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface mt-0.5">94.2% on-time resolution</span>
+</div>
+</div>
+</section>
+<!-- Administrative Action Panel Card (Staff Action Module) -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<!-- Top decorative micro accent bar -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-primary to-secondary"></div>
+<div class="flex items-center justify-between pb-space-xs pt-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary block">Internal Control</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Dispatch Action</h2>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold">Staff View</span>
+</div>
+<!-- Status Selector Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-medium">Update Ticket Status</label>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg bg-surface-container-low px-3 py-2.5 font-label-md text-label-md text-on-surface pr-8 focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option selected="" value="in_progress">In Progress (Active Work Order)</option>
+<option value="mark_resolved">Mark Resolved</option>
+<option value="escalate">Escalate to Facilities Director</option>
+<option value="reject">Reject / Out of Scope</option>
+</select>
+<span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary material-symbols-outlined text-[20px]">
+              expand_more
+            </span>
+</div>
+</div>
+<!-- Official Remark Textarea -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-medium">Official Remark or Closing Note</label>
+<textarea class="w-full rounded-lg bg-surface-container-low p-3 font-body-md text-body-md text-on-surface placeholder:text-secondary/60 focus:bg-surface-container-lowest transition-all focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Enter official department response or closing note for the student record..." rows="4"></textarea>
+</div>
+<!-- Quick Checkbox Notification -->
+<label class="flex items-start gap-2.5 cursor-pointer select-none">
+<input checked="" class="mt-0.5 h-4 w-4 rounded accent-primary text-on-primary focus:ring-0" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface-variant leading-snug">
+            Notify student via university email &amp; mobile push notification
+          </span>
+</label>
+<!-- Action Buttons Row -->
+<div class="flex flex-col sm:flex-row items-center gap-2 pt-space-xs">
+<button class="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 text-on-primary font-label-md text-label-md hover:bg-emerald-800 transition-all hover:-translate-y-0.5 shadow-sm active:translate-y-0">
+<span class="material-symbols-outlined text-[18px]">task_alt</span>
+            Mark Resolved
+          </button>
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-error-container/80 text-on-error-container hover:bg-error-container font-label-md text-label-md transition-all hover:-translate-y-0.5 active:translate-y-0">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span>Reject</span>
+</button>
+</div>
+</section>
+<!-- Department Contact Reference Box -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Department Escalation Lead</span>
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-md text-label-md font-semibold text-on-surface block">Zone 3 HVAC Dispatch Desk</span>
+<span class="font-label-sm text-label-sm text-secondary">ext. 4402 • facilities-zone3@campus.edu</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest text-secondary hover:text-primary flex items-center justify-center shadow-xs transition-colors" title="Email Desk">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive star rating micro-interaction
+  document.addEventListener('DOMContentLoaded', () => {
+    const starButtons = document.querySelectorAll('#star-rating-group .star-btn');
+    const ratingLabel = document.getElementById('rating-label');
+    const ratingLabels = ['1 Star - Poor', '2 Stars - Fair', '3 Stars - Good', '4 Stars - Very Good', '5 Stars - Excellent'];
+    let selectedRating = 0;
+
+    starButtons.forEach((btn, index) => {
+      btn.addEventListener('mouseenter', () => {
+        highlightStars(index + 1);
+        if (ratingLabel) ratingLabel.textContent = ratingLabels[index];
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        highlightStars(selectedRating);
+        if (ratingLabel) {
+          ratingLabel.textContent = selectedRating > 0 ? ratingLabels[selectedRating - 1] : 'Click to rate';
+        }
+      });
+
+      btn.addEventListener('click', () => {
+        selectedRating = index + 1;
+        highlightStars(selectedRating);
+        if (ratingLabel) ratingLabel.textContent = ratingLabels[index];
+      });
+    });
+
+    function highlightStars(count) {
+      starButtons.forEach((btn, idx) => {
+        if (idx < count) {
+          btn.classList.remove('text-surface-dim');
+          btn.classList.add('text-amber-500');
+        } else {
+          btn.classList.remove('text-amber-500');
+          btn.classList.add('text-surface-dim');
+        }
+      });
+    }
+  });
+</script></main></div></body></html>
